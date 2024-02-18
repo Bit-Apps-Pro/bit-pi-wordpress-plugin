@@ -1,0 +1,22 @@
+.tool {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.toolTitle {
+  composes: mb-0 mt-1 from global;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--txt);
+  text-align: center;
+}

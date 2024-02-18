@@ -1,0 +1,40 @@
+.delay {
+  composes: flx p-2 ai-cen from global;
+  box-shadow:
+    0 0 0 1.5px var(--border-20) inset,
+    0 4px 11px -8px rgb(175, 175, 175);
+  color: var(--accent-color);
+  height: 75px !important;
+  background: var(--bg);
+  width: 75px !important;
+  border-radius: 50%;
+  clip-path: url('#tools-clip-path') !important;
+}
+
+:global(.selected) .delay,
+.delay:focus-within {
+  box-shadow:
+    0 0 0 3px var(--accent-color) inset,
+    0 4px 11px -8px rgb(175, 175, 175),
+    0 0 0 1px var(--accent-color);
+}
+
+.actions {
+  composes: round from global;
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  background-color: var(--bg);
+}
+
+.input {
+  width: 200px !important;
+  padding: 2px;
+}
+
+:global(.selected) .delay ~ .actions,
+.delay:focus-within ~ .actions {
+  display: block;
+}

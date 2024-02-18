@@ -1,0 +1,79 @@
+.cardItemWithHandle {
+  composes: pos-rel from global;
+}
+
+.condition {
+  composes: flx ai-cen m-0 jc-sb pos-rel from global;
+  height: 33px;
+  background-color: var(--bg-5);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 7px;
+  gap: 5px;
+}
+
+.condActionBtnWrp {
+  composes: flx from global;
+  position: absolute;
+  right: 0;
+  opacity: 0;
+  transition: 0.5s opacity ease;
+}
+
+.condition:hover .condActionBtnWrp {
+  opacity: 1;
+}
+
+.condition:focus-within .condActionBtnWrp {
+  opacity: 1;
+}
+
+.cardHeaderIcon {
+  composes: flx ai-cen jc-cen from global;
+  width: 50px;
+  height: 50px;
+  aspect-ratio: 1;
+}
+
+.cardItemTitle {
+  composes: m-0 txt-xs fw-med from global;
+  width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.condition:is(:hover, :focus-within) .cardItemTitle {
+  width: 70%;
+}
+
+.condition:focus-within {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.rightHandle {
+  box-shadow: 0 0 0 6px var(--fbuilder-bg) inset;
+  right: -22px;
+}
+
+[color-scheme='dark'] .rightHandle {
+  box-shadow: 0 0 0 6px var(--bg) inset;
+}
+
+/* 
+.rightHandle::before {
+  position: absolute;
+  content: '';
+  width: 17px;
+  height: 17px;
+  z-index: -11;
+  border-radius: 50%;
+  border: 3px solid var(--fbuilder-bg);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  clip-path: inset(0 49.5% 0 0);
+} */

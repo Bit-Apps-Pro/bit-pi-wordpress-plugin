@@ -1,0 +1,28 @@
+.contextMenuCard {
+  composes: pos-fixed p-1 from global;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.searchResult {
+  composes: m-0 p-0 list-none from global;
+}
+
+.searchedResultLabel {
+  composes: ml-1 mb-0 from global;
+  padding-bottom: 8px;
+  font-size: 16px;
+  color: var(--txt);
+  border-bottom: 1px solid var(--border-20);
+}
+
+.searchedResult {
+  composes: mb-2 from global;
+}
+
+.notFound {
+  composes: ta-cen mt-4 from global;
+  color: var(--bg-30);
+}

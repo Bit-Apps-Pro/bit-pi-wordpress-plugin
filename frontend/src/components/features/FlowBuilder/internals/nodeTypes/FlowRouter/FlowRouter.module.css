@@ -1,0 +1,51 @@
+.router {
+  composes: flx p-2 ai-cen jc-cen from global;
+  box-shadow:
+    0 0 0 1.5px var(--border-20) inset,
+    0 4px 11px -8px rgb(175, 175, 175);
+  color: var(--accent-color);
+  height: 75px !important;
+  background: var(--bg);
+  width: 75px !important;
+  border-radius: 50%;
+  clip-path: url('#tools-clip-path') !important;
+}
+
+:global(.selected) .router,
+.router:focus-within {
+  box-shadow:
+    0 0 0 3px var(--accent-color) inset,
+    0 4px 11px -8px rgb(175, 175, 175),
+    0 0 0 1px var(--accent-color);
+}
+
+.actions {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
+
+:global(.selected) .router ~ .actions,
+.router:focus-within ~ .actions {
+  display: block;
+}
+
+.router .addBtn {
+  display: none;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.router .addBtn:hover {
+  background-color: transparent !important;
+}
+
+.router:hover .routerIcon {
+  display: none;
+}
+
+.router:hover .addBtn {
+  display: block;
+}

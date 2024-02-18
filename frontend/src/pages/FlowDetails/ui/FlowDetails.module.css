@@ -1,0 +1,82 @@
+.flowDetails {
+  composes: flx from global;
+  height: 100%;
+}
+
+.app {
+  composes: flx ai-cen mb-4 from global;
+}
+
+.appContent {
+  composes: flx flx-col from global;
+}
+
+.appInfo {
+  composes: flx ai-cen from global;
+  margin-bottom: 2px;
+}
+
+.integrationMethod {
+  composes: flx ai-cen from global;
+}
+
+.appIcon {
+  composes: mr-2 from global;
+  width: 35px;
+  height: 35px;
+}
+
+.appName {
+  composes: m-0 txt-md mr-1 from global;
+}
+
+.appActionName {
+  padding: 2px 3px;
+  font-size: 11px;
+  border-radius: 6px;
+}
+
+.appSelectBtn {
+  composes: p-1 from global;
+  width: 100%;
+}
+
+.dummyImg {
+  composes: d-ib from global;
+  width: 30px;
+  height: 30px;
+  background-color: var(--bg-20);
+  border-radius: 10px;
+  margin-right: 7px;
+}
+
+.appSearchInput {
+  composes: m-1 mt-2 from global;
+  width: 200px;
+}
+
+.btn {
+  composes: mt-3 ml-auto from global;
+}
+
+.selectControl {
+  composes: flx jc-sb ai-end mb-3 from global;
+}
+
+.inputLabel {
+  composes: mb-2 d-ib fw-med from global;
+  font-size: 14px;
+  color: var(--txt);
+}
+
+.inputControl {
+  composes: flx ai-end mb-3 from global;
+}
+
+.addWebhookWrap {
+  composes: m-2 from global;
+}
+
+.addWebhookInput {
+  width: 316px;
+}

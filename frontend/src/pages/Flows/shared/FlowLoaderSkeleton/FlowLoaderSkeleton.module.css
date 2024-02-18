@@ -1,0 +1,11 @@
+.flowLoaderSection {
+  composes: grid from global;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.flowLoader {
+  height: 107px;
+  border-radius: var(--border-rad);
+}

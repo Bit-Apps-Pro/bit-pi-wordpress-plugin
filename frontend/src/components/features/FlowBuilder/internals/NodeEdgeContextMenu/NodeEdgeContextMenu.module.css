@@ -1,0 +1,43 @@
+.nodeEdgeContextMenu {
+  composes: p-1 from global;
+  width: 120px;
+}
+
+.deleteConfirmationCard {
+  composes: ta-cen from global;
+  width: 150px;
+}
+
+.deleteConfirmationHeaderIcon {
+  composes: round d-ib mt-1 from global;
+  padding: 7px;
+  line-height: 0;
+}
+
+.contextMenuItem {
+  composes: py-1 px-2 pointer flx ai-cen from global;
+  column-gap: 7px;
+  border: none;
+  width: 100%;
+  background-color: transparent;
+  border-radius: calc(var(--border-rad) - 5px);
+  font-family: var(--font-family);
+  color: var(--txt);
+  text-align: left;
+  font-weight: 500;
+  outline: none;
+}
+
+.contextMenuDeleteBtn {
+  background-color: var(--danger-bg);
+  color: var(--danger-txt);
+}
+
+.contextMenuDeleteBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.contextMenuDeleteBtn:hover:not(:disabled) {
+  background-color: var(--danger-bg-5);
+}

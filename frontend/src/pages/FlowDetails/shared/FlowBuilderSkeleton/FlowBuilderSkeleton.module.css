@@ -1,0 +1,39 @@
+.flowBuilderSkeletonWrap {
+  composes: grid p-3 from global;
+  grid-template-columns: 0.18fr 1fr;
+  gap: 16px;
+  height: calc(100vh - 50px);
+}
+
+.flowBuilderLefsideSkeleton {
+  composes: grid gap-2 from global;
+  grid-template-rows: auto auto 1fr;
+}
+
+.item {
+  height: 50px;
+  border-radius: var(--border-rad);
+}
+
+.apps {
+  border-radius: var(--border-rad);
+}
+
+.flowBuilderSkeleton {
+  composes: grid gap-2 from global;
+  grid-template-rows: auto 1fr;
+}
+
+.builderHeader {
+  composes: flx jc-end gap-2 from global;
+}
+
+.builderButton {
+  border-radius: var(--border-rad);
+  height: 30px;
+  width: 90px;
+}
+
+.builder {
+  border-radius: var(--border-rad);
+}

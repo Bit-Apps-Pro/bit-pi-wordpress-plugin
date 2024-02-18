@@ -1,0 +1,13 @@
+.topRightControls {
+  composes: pos-abs flx ai-cen jc-cen from global;
+  top: 0.625rem;
+  right: 0.625rem;
+  z-index: 99;
+}
+
+.topLeftControls {
+  composes: pos-abs flx ai-cen jc-cen from global;
+  top: 0.625rem;
+  left: 0.625rem;
+  z-index: 99;
+}

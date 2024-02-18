@@ -1,0 +1,9 @@
+.flowsWrapper {
+  padding: 0 20px;
+}
+
+.flowPagination {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+}

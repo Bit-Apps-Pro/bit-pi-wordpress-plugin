@@ -1,0 +1,20 @@
+.addNodeBtn {
+  position: absolute !important;
+  top: 50%;
+  right: -120px;
+  transform: translateY(-50%);
+  opacity: 0.5;
+}
+
+.addNodeBtn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: calc(100% + 6px);
+  width: 68px;
+}
+
+.addNodeBtn:hover {
+  opacity: 1;
+}

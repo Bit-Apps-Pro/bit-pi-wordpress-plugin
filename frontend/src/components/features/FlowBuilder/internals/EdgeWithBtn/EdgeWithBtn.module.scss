@@ -1,0 +1,83 @@
+/* stylelint-disable selector-class-pattern */
+.edgebutton {
+  color: var(--txt-1);
+  composes: pos-fixed flx jc-cen ai-cen pointer p-1 from global;
+  z-index: 9999;
+  background-color: var(--bg-80);
+  border-radius: 100px;
+  border: 1px solid var(--bg-30);
+}
+
+[color-scheme='dark'] .edgebutton {
+  color: var(--accent-color);
+  background-color: var(--bg-10);
+}
+
+.edgeBtnWrp {
+  display: flex;
+  background: transparent;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+:global(.react-flow__connection-path),
+:global(.temp > path:first-child) {
+  stroke: var(--accent-color);
+  stroke-dasharray: 15px;
+  animation: dashanim 3s linear infinite;
+  stroke-linecap: round;
+  stroke-width: 5;
+  fill: none;
+  marker-end: url('#connection-marker');
+}
+
+.edge-path {
+  stroke: var(--accent-color);
+  stroke-width: 4px;
+  stroke-linecap: round;
+  transition: stroke-width 0.2s;
+  marker-end: url('#edge-end-marker');
+  fill: none;
+}
+
+.shadow-edge-path {
+  fill: none;
+  stroke-width: 20px;
+}
+
+:global(.edge .react-flow__edgeupdater:hover) {
+  fill: var(--accent-color);
+  /* stylelint-disable-next-line csstree/validator */
+  r: 9;
+  stroke-linecap: round;
+  transition: fill 0.2s;
+}
+
+:global(.edge .edge-path:hover) {
+  stroke: var(--accent-color);
+  stroke-width: 6px;
+  stroke-linecap: round;
+  cursor: pointer;
+}
+
+:global(.edge.selected .edge-path) {
+  stroke-dasharray: 7;
+  stroke-linecap: round;
+  fill: none;
+
+  :global {
+    animation: dashanim 3s linear infinite;
+  }
+}
+
+@keyframes dashanim {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -150px;
+  }
+}
