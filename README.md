@@ -1,4 +1,4 @@
-## How to Run the Project
+How to Run the Project
 
 This repository contains the development version of an automation plugin project. It is not stable. For the stable version, please visit the WordPress (WP) version.
 
