@@ -25,7 +25,7 @@ if (elm) {
         <HashRouter>
           <AppRoutes />
         </HashRouter>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        <ReactQueryDevtools initialIsOpen={false} position="bottom" />
       </QueryClientProvider>
     </StrictMode>
   )

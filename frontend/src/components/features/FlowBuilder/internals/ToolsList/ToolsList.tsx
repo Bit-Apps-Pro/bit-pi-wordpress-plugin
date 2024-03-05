@@ -3,7 +3,7 @@ import { type ToolType } from '@features/FlowBuilder/internals/BuilderLeftSideBa
 
 export default function ToolsList({ tools }: { tools: ToolType[] }) {
   return (
-    <div className="flx gap-3 ta-cen jc-sb flx-wrap m-1">
+    <div className="flx gap-3 ta-cen jc-sb flx-wrap px-2">
       {tools.map(tool => (
         <Tool key={tool.slug} title={tool.title} appConfig={tool} />
       ))}

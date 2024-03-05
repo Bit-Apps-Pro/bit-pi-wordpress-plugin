@@ -14,7 +14,7 @@ const appsVariant = {
     transition: {
       duration: 0.01,
       when: 'beforeChildren',
-      staggerChildren: 0.1
+      staggerChildren: 0.06
     }
   }
 }

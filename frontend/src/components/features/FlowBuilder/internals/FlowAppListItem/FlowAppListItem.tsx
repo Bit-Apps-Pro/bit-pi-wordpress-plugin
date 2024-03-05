@@ -1,4 +1,3 @@
-import { select } from '@common/helpers/globalHelpers'
 import FlowBuilderDraggableItem from '@components/features/FlowBuilder/internals/FlowBuilderDraggableItem'
 import { useTheme } from '@emotion/react'
 import { type AppType } from '@features/NodeDetailsModal/internals/AppsList/appsListData'
@@ -36,29 +35,13 @@ const flowItemStyle = ({ token }: { token: GlobalToken }) => ({
 export default function FlowAppListItem({ title, appConfig }: FlowAppListItemPropsTypes) {
   const { token } = useTheme()
 
-  const handleOnDrag = () => {
-    const flowToolAndAppsTab = select('#appsAndToolsPanel :first-child')
-
-    if (flowToolAndAppsTab) {
-      flowToolAndAppsTab.style.overflowY = 'visible'
-    }
-  }
-
-  const handleOnDragStop = () => {
-    const flowToolAndAppsTab = select('#appsAndToolsPanel :first-child')
-
-    if (flowToolAndAppsTab) {
-      flowToolAndAppsTab.style.overflowY = 'scroll'
-    }
-  }
-
   return (
     <motion.li
       className="pos-rel"
       transition={{ duration: 0.01 }}
       variants={childVariant}
       css={{
-        background: token.colorBgElevated,
+        background: token.colorBgLayout,
         borderRadius: token.borderRadius + 2,
         boxShadow: `0 0 5px 1px ${token.colorBgContainerDisabled} inset`
       }}
@@ -68,8 +51,6 @@ export default function FlowAppListItem({ title, appConfig }: FlowAppListItemPro
         css={flowItemStyle}
         testId="draggable-app"
         appConfig={appConfig}
-        onDrag={handleOnDrag}
-        onDragStop={handleOnDragStop}
       >
         <img src={appConfig.iconURL} alt={title} className={cls.appIcon} />
         <div className={cls.appTitle}>{title}</div>

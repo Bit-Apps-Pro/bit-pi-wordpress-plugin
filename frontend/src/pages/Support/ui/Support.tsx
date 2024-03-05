@@ -2,6 +2,7 @@ import config from '@config/config'
 import LogoIcn from '@icons/LogoIcn'
 import LogoText from '@icons/LogoText'
 import LucideIcn from '@icons/LucideIcn'
+import { ddd } from '@pro/test2'
 import ut from '@resource/utilsCssInJs'
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, Card, Checkbox, Col, Flex, Row, Skeleton, Space, Spin, Typography, theme } from 'antd'
@@ -31,9 +32,10 @@ const SUPPORT_FETCH_URL =
 
 export default function Support() {
   const { token } = theme.useToken()
-  const { data: supportInfo, isLoading } = useQuery<SupportObject, Error>(['support'], () =>
-    fetch(`${SUPPORT_FETCH_URL}`).then(res => res.json() as Promise<SupportObject>)
-  )
+  const { data: supportInfo, isLoading } = useQuery<SupportObject, Error>({
+    queryKey: ['support'],
+    queryFn: () => fetch(`${SUPPORT_FETCH_URL}`).then(res => res.json() as Promise<SupportObject>)
+  })
 
   if (isLoading || !supportInfo)
     return (
@@ -50,6 +52,8 @@ export default function Support() {
           <LogoText h={25} />
         </Space>
       </div>
+
+      {ddd()}
 
       <Row>
         <Col md={13} sm={24}>

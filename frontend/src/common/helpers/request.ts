@@ -16,16 +16,11 @@ interface QueryParam {
   [key: string]: string | number
 }
 
-interface DefaultResponse {
-  created_at: string
-  updated_at: string
-}
-
 export type ApiResponseType = Record<string, string | number>
 
 export interface Response<T> {
   status: 'success' | 'error'
-  data: T extends DefaultResponse ? T : T & DefaultResponse
+  data: T
   code: 'SUCCESS' | 'ERROR'
 }
 

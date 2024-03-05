@@ -74,7 +74,7 @@ const collapseItems = (item: Log, theme?: ThemeType): CollapseProps['items'] => 
 
         {/* <Collapse
           size="small"
-          bordered={false}
+          variant="borderless"
           style={{ padding: '0 !important' }}
           items={[
             {

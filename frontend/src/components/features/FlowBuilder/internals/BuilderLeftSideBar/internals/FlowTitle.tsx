@@ -17,7 +17,7 @@ export default function FlowTitle() {
   return (
     <Input
       className="mb-1 d-ib"
-      bordered={false}
+      variant="borderless"
       placeholder="Enter flow title"
       value={flowDetails?.title || ''}
       onChange={e => saveTitle(e.target.value)}

@@ -1,6 +1,5 @@
 .flowAppList {
-  composes: m-0 p-0 list-none from global;
-  height: 77%;
+  composes: m-0 px-2 py-0 list-none from global;
 }
 
 .notFound {

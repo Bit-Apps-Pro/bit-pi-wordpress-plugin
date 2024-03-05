@@ -84,7 +84,7 @@ export default function AppsList({
       itemLayout="vertical"
       dataSource={getAppsList() as AppType[]}
       renderItem={({ title, slug, iconURL }) => (
-        <List.Item css={ut({ p: '0*', m: 0, bdr: 'none*' })}>
+        <List.Item css={ut({ p: '0*', m: '0 0 2px*', bdr: 'none*' })}>
           <Button
             onClick={selectApp(slug)}
             block
@@ -94,7 +94,7 @@ export default function AppsList({
               ta: 'left*',
               dis: 'flex*',
               ai: 'center',
-              bg: slug === flowNode?.appSlug && `${token.colorPrimaryBg}!important`
+              bg: slug === flowNode?.appSlug && `${token.colorBgTextActive}!important`
             })}
             icon={<img src={iconURL} alt={title} className={cls.appIcon} />}
           >

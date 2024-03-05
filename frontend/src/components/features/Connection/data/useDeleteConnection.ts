@@ -6,11 +6,11 @@ import { type ConnectionsType } from './ConnectionQueryType'
 export default function useDeleteConnection() {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['delete_connection'],
     mutationFn: async (connectionId: number) => request<number>(`connections/${connectionId}/delete`),
-    onSuccess: ({ data: connectionId }: { data: number }) => {
-      queryClient.setQueryData(['connections', 'all'], (prev: ConnectionsType) => {
+    onSuccess: ({ data: connectionId }) => {
+      queryClient.setQueryData(['connections', 'all'], (prev: { data: ConnectionsType }) => {
         if (!prev) return prev
         return {
           ...prev,
@@ -22,6 +22,6 @@ export default function useDeleteConnection() {
 
   return {
     deleteConnection: mutateAsync,
-    isConnectionDeleting: isLoading
+    isConnectionDeleting: isPending
   }
 }

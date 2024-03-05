@@ -10,6 +10,7 @@ import cls from './Layout.module.css'
 import Sidebar from './Sidebar'
 
 const { useToken } = theme
+const { Content } = AntLayout
 
 export default function Layout() {
   const { isDarkTheme } = useAtomValue($appConfig)
@@ -17,6 +18,8 @@ export default function Layout() {
 
   return (
     <ThemeProvider theme={antConfig}>
+      <Global styles={globalCssInJs(antConfig)} />
+
       <AntLayout
         hasSider
         // eslint-disable-next-line react/no-unknown-property
@@ -28,11 +31,10 @@ export default function Layout() {
         }}
         className={`${cls.layoutWrp} ${isDarkTheme ? 'dark' : 'light'}`}
       >
-        <Global styles={globalCssInJs(antConfig)} />
         <Sidebar />
-        <div className="w-100 o-auto">
+        <Content style={{ overflow: 'auto' }} className="scroller thin">
           <Outlet />
-        </div>
+        </Content>
       </AntLayout>
     </ThemeProvider>
   )

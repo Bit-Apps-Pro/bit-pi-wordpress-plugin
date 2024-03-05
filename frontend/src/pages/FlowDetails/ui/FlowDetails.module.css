@@ -1,5 +1,7 @@
 .flowDetails {
-  composes: flx from global;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  overflow: auto;
   height: 100%;
 }
 

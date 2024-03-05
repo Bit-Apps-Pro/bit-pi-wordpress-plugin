@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 export default function useSaveWebhook(flowId?: number) {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['saveWebhook'],
     mutationFn: async (webhookDetails: WebhookDetailsType & { flow_id: number }) =>
       request<WebhookType>('webhooks/save', webhookDetails, null, 'POST'),
@@ -27,6 +27,6 @@ export default function useSaveWebhook(flowId?: number) {
 
   return {
     saveWebhook: mutateAsync,
-    isSavingWebhook: isLoading
+    isSavingWebhook: isPending
   }
 }

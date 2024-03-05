@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 export default function useDeleteWebhook() {
   const queryClient = useQueryClient()
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['delete_webhook'],
     mutationFn: async (webhookId: number) => request<number>(`webhooks/${webhookId}/delete`),
     onSuccess: ({ data: webhookId }) => {
@@ -20,6 +20,6 @@ export default function useDeleteWebhook() {
 
   return {
     deleteWebhook: mutateAsync,
-    isWebhookDeleting: isLoading
+    isWebhookDeleting: isPending
   }
 }

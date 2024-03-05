@@ -313,50 +313,52 @@ function FlowBuilder({ children }: { children: ReactElement }) {
 
   return (
     <div id="bit-flow-builder-wrp" className={css.flowBuilderWrapper}>
-      {isFlowFetching && (
-        <div className={css.loading} css={{ backgroundColor: token.colorFillSecondary }}>
-          <Typography.Title level={4}>
-            <LoadingOutlined /> Loading...
-          </Typography.Title>
-        </div>
-      )}
+      <div className={css.flowBuilderInner}>
+        {isFlowFetching && (
+          <div className={css.loading} css={{ backgroundColor: token.colorFillSecondary }}>
+            <Typography.Title level={4}>
+              <LoadingOutlined /> Loading...
+            </Typography.Title>
+          </div>
+        )}
 
-      {children}
+        {children}
 
-      <ContextMenuProvider>
-        <NodeDetailsWrapper>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            onMove={closeContextMenu}
-            onPaneClick={onPaneClick}
-            selectNodesOnDrag={false}
-            onEdgeContextMenu={edgeContextMenuOpen}
-            onNodeContextMenu={nodeContextMenuOpen}
-            onEdgeUpdate={onEdgeUpdate}
-            onPaneContextMenu={onPaneContextMenu}
-            // onMoveEnd={handleMoveEnd}
-            onNodeDrag={onNodeDrag}
-            onNodeDragStop={handleNodeDragStop}
-            // connectionLineComponent
-            // defaultZoom={1}
-            // fitView
-            // attributionPosition="bottom-left"
-          >
-            <Background
-              css={{ background: isDarkTheme ? 'transparent' : token.colorBgContainer }}
-              color={token.colorBorder}
-              size={2}
-              gap={18}
-            />
-          </ReactFlow>
-        </NodeDetailsWrapper>
-      </ContextMenuProvider>
+        <ContextMenuProvider>
+          <NodeDetailsWrapper>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              onMove={closeContextMenu}
+              onPaneClick={onPaneClick}
+              selectNodesOnDrag={false}
+              onEdgeContextMenu={edgeContextMenuOpen}
+              onNodeContextMenu={nodeContextMenuOpen}
+              onEdgeUpdate={onEdgeUpdate}
+              onPaneContextMenu={onPaneContextMenu}
+              // onMoveEnd={handleMoveEnd}
+              onNodeDrag={onNodeDrag}
+              onNodeDragStop={handleNodeDragStop}
+              // connectionLineComponent
+              // defaultZoom={1}
+              // fitView
+              // attributionPosition="bottom-left"
+            >
+              <Background
+                css={{ background: isDarkTheme ? 'transparent' : token.colorBgContainer }}
+                color={token.colorBorder}
+                size={2}
+                gap={18}
+              />
+            </ReactFlow>
+          </NodeDetailsWrapper>
+        </ContextMenuProvider>
+      </div>
     </div>
   )
 }

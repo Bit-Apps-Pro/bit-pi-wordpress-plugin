@@ -3,6 +3,7 @@ const fontFamily =
 
 export const lightThemeConfig = {
   fontFamily,
+  zIndexPopupBase: 100000,
   // borderRadius: 10,
   // borderRadiusSM: 8,
   // borderRadiusXS: 4,
@@ -30,6 +31,7 @@ export const lightThemeConfig = {
 
 export const darkThemeConfig = {
   fontFamily,
+  zIndexPopupBase: 100000,
   borderRadius: 10,
   borderRadiusSM: 8,
   borderRadiusXS: 4,

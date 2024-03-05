@@ -30,38 +30,41 @@ export default function useFlowNode(nodeId: string) {
   const flowId = Number(useParams()?.flowId)
   const dispatchFlowMachine = useSetAtom($flowMachineSelector)
 
+  const setDBDataToMachine = async (node: NodeType, connections: ConnectionType[]) => {
+    dispatchFlowMachine({
+      actionType: 'IMPORT_MACHINE',
+      data: { nodeId, appSlug: node.app_slug, nodeType: NodeTypeDef.action }
+    })
+
+    if (node.machine_slug === '') return
+
+    const flowNodeData: FlowNodeType = await getFlowNodeDetailsBySlugs(node.app_slug, node.machine_slug)
+
+    setFlowNode(prev => {
+      const flowNodeDetails = deepCopy({ ...flowNodeData, ...prev[nodeId] })
+      const mergedFlowNode = merge(flowNodeDetails, { states: node.data })
+
+      return create(prev, draft => {
+        draft[nodeId] = create(mergedFlowNode, draft2 => {
+          draft2.states.connections = connections
+        })
+      })
+    })
+  }
+
   const { data, isLoading } = useQuery({
     queryKey: ['flow_node', flowId, nodeId],
-    queryFn: async () => request<FetchedFlowNodeType>(`node/${flowId}/${nodeId}`, null, null, 'GET'),
-    enabled: !!flowId && !!nodeId && !!flowNode[nodeId]?.appTitle && !Number.isNaN(flowId),
-    onSuccess: async res => {
-      if (res.status === 'error') return
-      const { node, connections } = res.data
+    queryFn: async () => {
+      const res = await request<FetchedFlowNodeType>(`node/${flowId}/${nodeId}`, null, null, 'GET')
 
-      const setExistingData = async () => {
-        dispatchFlowMachine({
-          actionType: 'IMPORT_MACHINE',
-          data: { nodeId, appSlug: node.app_slug, nodeType: NodeTypeDef.action }
-        })
-        if (node.machine_slug === '') return
-        const flowNodeData: FlowNodeType = await getFlowNodeDetailsBySlugs(
-          node.app_slug,
-          node.machine_slug
-        )
-        setFlowNode(prev => {
-          const flowNodeDetails = deepCopy({ ...flowNodeData, ...prev[nodeId] })
-          const mergedFlowNode = merge(flowNodeDetails, { states: node.data })
-
-          return create(prev, draft => {
-            draft[nodeId] = create(mergedFlowNode, draft2 => {
-              draft2.states.connections = connections
-            })
-          })
-        })
+      if (res.status === 'success') {
+        const { node, connections } = res.data
+        setDBDataToMachine(node, connections)
       }
 
-      setExistingData()
-    }
+      return res
+    },
+    enabled: !!flowId && !!nodeId && !!flowNode[nodeId]?.appTitle && !Number.isNaN(flowId)
   })
 
   return {

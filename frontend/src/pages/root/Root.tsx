@@ -1,5 +1,3 @@
-import { Typography } from 'antd'
-
 // const defaultValue: RepeaterFieldValueType[][] = [
 //   [
 //     {
@@ -21,7 +19,6 @@ import { Typography } from 'antd'
 //     }
 //   ]
 // ]
-
 // const fieldsMetaData: FieldPropsType[] = [
 //   {
 //     componentName: ComponentName.select,
@@ -52,11 +49,21 @@ import { Typography } from 'antd'
 //     wrapperClassName: 'w-100'
 //   }
 // ]
+import { aaa } from '@pro/test'
+import { Typography } from 'antd'
+
+// const p = 'C:/laragon/www/wpdev/wp-content/plugins/bit-flow/pro/frontend/src/'
+
+// const { aaa } = await import(`${p}test`)
 
 export default function Root() {
+  // console.log({ aaa: aaa(), imp: import.meta, PRO })
+  const pro = aaa()
+  // const pro = 'aaa()'
+
   return (
     <div className="p-6">
-      <Typography.Title level={1}>Welcome to Bit Pi</Typography.Title>
+      <Typography.Title level={1}>Welcome to Bit Pi {pro}</Typography.Title>
       <Typography.Title level={3}>Automate tasks within your WordPress</Typography.Title>
       <Typography.Title level={5}>More functionality in dashboard coming soon.</Typography.Title>
     </div>

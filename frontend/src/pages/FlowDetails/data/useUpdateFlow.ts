@@ -20,10 +20,10 @@ interface FlowType {
 }
 
 export default function useUpdateFlow() {
-  const { mutateAsync, data, isLoading } = useMutation({
+  const { mutateAsync, data, isPending } = useMutation({
     mutationKey: ['update_flow'],
     // TODO: Fix this type
     mutationFn: async (flowData: FlowType) => request<any>('flows/update', flowData) // eslint-disable-line @typescript-eslint/no-explicit-any
   })
-  return { updateFlow: mutateAsync, updateFlowData: data?.data, isFlowUpdating: isLoading }
+  return { updateFlow: mutateAsync, updateFlowData: data?.data, isFlowUpdating: isPending }
 }

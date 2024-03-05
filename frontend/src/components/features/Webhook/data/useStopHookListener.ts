@@ -6,13 +6,13 @@ import { useMutation } from '@tanstack/react-query'
 export default function useStopHookListener() {
   const flowId = Number(useParams()?.flowId)
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['stopHookListener'],
     mutationFn: async () => request<WebhookType>(`stop-hook-listener`, { flowId }, null, 'POST')
   })
 
   return {
     stopHookListener: mutateAsync,
-    isStoppingListener: isLoading
+    isStoppingListener: isPending
   }
 }

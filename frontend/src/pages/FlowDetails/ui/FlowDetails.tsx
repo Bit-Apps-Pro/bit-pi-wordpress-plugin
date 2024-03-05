@@ -57,7 +57,7 @@ function FlowDetailsWithFlowProvider() {
 
   return (
     <>
-      <motion.div layoutId={`flowDetails-${flowId}`} className={cls.flowDetails}>
+      <motion.div layoutId={`flowDetails-${flowId}`} className={`${cls.flowDetails} scroller thin`}>
         <BuilderLeftSideBar />
 
         <FlowBuilder>

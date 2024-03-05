@@ -49,7 +49,7 @@ function BuilderLeftSideBar(): JSX.Element {
       className={css.builderLeftBar}
       css={({ token }) => ({ borderRight: `1px solid ${token.controlOutline}` })}
     >
-      <Space direction="vertical" size={4}>
+      <Space direction="vertical" size={4} className="px-2 pt-1">
         <FlowTitle />
         <Input
           allowClear
@@ -63,7 +63,7 @@ function BuilderLeftSideBar(): JSX.Element {
       {!searchDebounceValue && (
         <Tabs
           panelProps={{ id: 'appsAndToolsPanel' }}
-          css={{ marginTop: '0.5rem!important' }}
+          css={{ marginTop: '0.5rem!important', marginInline: '0.625rem !important' }}
           block
           defaultValue="apps"
           options={[
@@ -71,30 +71,34 @@ function BuilderLeftSideBar(): JSX.Element {
             { value: 'tools', label: 'Tools' }
           ]}
         >
-          <TabPanel value="apps" className={css.tabPanel}>
+          <TabPanel value="apps" className="scroller thin">
             <FlowAppList apps={appsListData} />
           </TabPanel>
-          <TabPanel value="tools">
+          <TabPanel value="tools" className="scroller thin">
             <ToolsList tools={toolListData} />
           </TabPanel>
         </Tabs>
       )}
 
-      {searchDebounceValue && Boolean(searchedAppsWithTools.apps.length) && (
-        <div className={css.searchedResult}>
-          <Typography.Title level={5} className={css.searchedResultLabel}>
-            Apps
-          </Typography.Title>
-          <FlowAppList apps={searchedAppsWithTools.apps} />
-        </div>
-      )}
+      {searchDebounceValue && (
+        <div className="scroller thin">
+          {Boolean(searchedAppsWithTools.apps.length) && (
+            <div className={css.searchedResult}>
+              <Typography.Title level={5} className={css.searchedResultLabel}>
+                Apps
+              </Typography.Title>
+              <FlowAppList apps={searchedAppsWithTools.apps} />
+            </div>
+          )}
 
-      {searchDebounceValue && Boolean(searchedAppsWithTools.tools.length) && (
-        <div className={css.searchedResult}>
-          <Typography.Title level={5} className={css.searchedResultLabel}>
-            Tools
-          </Typography.Title>
-          <ToolsList tools={searchedAppsWithTools.tools} />
+          {searchDebounceValue && Boolean(searchedAppsWithTools.tools.length) && (
+            <div className={css.searchedResult}>
+              <Typography.Title level={5} className={css.searchedResultLabel}>
+                Tools
+              </Typography.Title>
+              <ToolsList tools={searchedAppsWithTools.tools} />
+            </div>
+          )}
         </div>
       )}
 

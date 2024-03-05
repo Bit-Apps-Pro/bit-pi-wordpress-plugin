@@ -1,7 +1,12 @@
 .flowBuilderWrapper {
-  composes: pos-rel from global;
-  width: 100%;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 50px);
+}
+
+.flowBuilderInner {
   height: 100%;
+  position: relative;
 }
 
 .topRightControls {

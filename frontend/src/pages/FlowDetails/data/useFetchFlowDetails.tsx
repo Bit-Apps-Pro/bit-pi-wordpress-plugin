@@ -2,13 +2,12 @@ import { type Edge, type Node } from 'reactflow'
 
 import { $flowSetupModal } from '@common/globalStates'
 import { $flowDetails, type FlowType } from '@common/globalStates/$flowDetails'
-import { type FlowNodeType } from '@common/globalStates/$flowNodes'
-import $flowNodes from '@common/globalStates/$flowNodes'
+import $flowNodes, { type FlowNodeType } from '@common/globalStates/$flowNodes'
 import { type FlowMachineStatesType } from '@common/globalStates/flows/FlowMachineType'
 import request from '@common/helpers/request'
 import { getAppBySlug } from '@features/FlowBuilder/helpers/FlowBuilderHelper'
 import { type AppsSlugType } from '@features/NodeDetailsModal/internals/AppsList/appsListData'
-import { type UseQueryResult, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { castDraft, create } from 'mutative'
 
@@ -24,11 +23,7 @@ interface NodeType {
 interface FlowTypeWithNodes extends FlowType {
   nodes: NodeType[]
 }
-interface Response {
-  data: FlowTypeWithNodes
-  status: 'success' | 'error'
-  code: 'VALIDATION' | 'SUCCESS'
-}
+
 type SetNodesType = React.Dispatch<React.SetStateAction<Node<any, string | undefined>[]>> // eslint-disable-line @typescript-eslint/no-explicit-any
 type SetEdgesType = React.Dispatch<React.SetStateAction<Edge<any>[]>> // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -60,14 +55,13 @@ export default function useFetchFlowDetails(
   const setFlowNodes = useSetAtom($flowNodes)
   const { isOpen, id } = useAtomValue($flowSetupModal)
 
-  const { isLoading, data, isFetching, isError }: UseQueryResult<Response, Error> = useQuery({
+  const { isLoading, data, isFetching, isError } = useQuery({
     queryKey: ['flows', flowId],
-    queryFn: async () => request(`flows/${flowId}`, null, null, 'GET'),
-    enabled: !!flowId && !Number.isNaN(flowId),
-    refetchOnWindowFocus: !isOpen && !id,
-    onSuccess: res => {
+    queryFn: async () => {
+      const res = await request<FlowTypeWithNodes>(`flows/${flowId}`, null, null, 'GET')
+
       const flowData = res.data
-      if (typeof flowData?.id !== 'undefined') {
+      if (res.status === 'success' && typeof flowData?.id !== 'undefined') {
         // set flow details
         setFlow(flowData)
         if (flowData.data?.nodes) setNodes(flowData.data.nodes)
@@ -82,7 +76,11 @@ export default function useFetchFlowDetails(
           )
         })
       }
-    }
+
+      return res
+    },
+    enabled: !!flowId && !Number.isNaN(flowId),
+    refetchOnWindowFocus: !isOpen && !id
   })
 
   return {

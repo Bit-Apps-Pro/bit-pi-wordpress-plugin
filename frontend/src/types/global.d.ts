@@ -17,6 +17,26 @@ declare module '*.png'
 declare module '*.json'
 declare module 'deepmerge-alt'
 
+declare const SERVER_VARIABLES: {
+  nonce: string
+  rootURL: string
+  assetsURL: string
+  baseURL: string
+  ajaxURL: string
+  apiURL: {
+    base: string
+    separator: string
+  }
+  routePrefix: string
+  settings: string
+  dateFormat: string
+  timeFormat: string
+  timeZone: string
+  pluginSlug: string
+  proPluginVersion: string
+  isPro: string
+}
+
 // export type Prettify<T> = {
 //   [K in keyof T]: T[K]
 //   // eslint-disable-next-line @typescript-eslint/ban-types

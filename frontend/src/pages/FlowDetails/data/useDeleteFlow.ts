@@ -6,9 +6,9 @@ interface FlowDeletePayloadType {
 }
 
 export default function useDeleteFlow() {
-  const { mutate, data, isLoading } = useMutation({
+  const { mutate, data, isPending } = useMutation({
     mutationKey: ['delete_flow'],
     mutationFn: async (flowData: FlowDeletePayloadType) => request('flows/delete', flowData)
   })
-  return { deleteFlowMutate: mutate, deleteFlowData: data, isDeleteFlowLoading: isLoading }
+  return { deleteFlowMutate: mutate, deleteFlowData: data, isDeleteFlowLoading: isPending }
 }

@@ -11,8 +11,6 @@ interface WebhookType extends WebhookDetailsType {
 
 type WebhookResType = { data: WebhookType[] } | undefined
 
-type WebhooksType = WebhookType[]
-
 type WebhookPropsType = {
   appSlug: string
   value?: number

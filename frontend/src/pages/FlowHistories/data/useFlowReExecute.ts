@@ -13,7 +13,7 @@ type FlowReExecuteType = {
 }
 
 export default function useFlowReExecute() {
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['flow_re_execute'],
     mutationFn: async ({ flowId }: FlowReExecuteType) =>
       request<ResponseType>(`flow/re-execute/${flowId}`, null, null, 'GET')
@@ -21,6 +21,6 @@ export default function useFlowReExecute() {
 
   return {
     FlowReExecuteMute: mutateAsync,
-    isReExecuteLoading: isLoading
+    isReExecuteLoading: isPending
   }
 }

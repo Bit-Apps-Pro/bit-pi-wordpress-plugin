@@ -159,7 +159,8 @@ export default function FlowBuilderDraggableItem({
 
     draggableDataNode.style.transition = 'opacity 0.2s ease-in .1s, box-shadow 250ms'
     draggableDataNode.style.opacity = '1'
-    if (onDragStop) onDragStop(e, draggableData)
+
+    onDragStop?.(e, draggableData)
   }
 
   return (

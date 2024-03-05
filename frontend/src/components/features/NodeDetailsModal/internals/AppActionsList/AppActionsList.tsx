@@ -83,7 +83,7 @@ export default function AppActionsList({
       itemLayout="vertical"
       dataSource={getMachines()}
       renderItem={machine => (
-        <List.Item css={ut({ p: '0*', m: 0, bdr: 'none*' })}>
+        <List.Item css={ut({ p: '0*', m: '0 0 2px*', bdr: 'none*' })}>
           <Button
             onClick={selectAction(machine.machineSlug)}
             block
@@ -96,13 +96,13 @@ export default function AppActionsList({
               jc: 'center',
               dir: 'column',
               h: 'auto*',
-              bg: machine.machineSlug === flowNode?.machineSlug && `${token.colorPrimaryBg}!important`
+              bg: machine.machineSlug === flowNode?.machineSlug && `${token.colorBgTextActive}!important`
             })}
           >
             {machine.label}
-            <span css={{ textTransform: 'capitalize', color: token.colorTextDescription }}>
+            <Typography.Text type="secondary" className="capitalize">
               {machine.runType}
-            </span>
+            </Typography.Text>
           </Button>
         </List.Item>
       )}

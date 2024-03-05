@@ -11,84 +11,66 @@ final class HtmlTagModifier
 {
     public function __construct()
     {
-        Hooks::addFilter('style_loader_tag', [$this, 'linkTagFilter'], 0, 1);
-        Hooks::addFilter('script_loader_tag', [$this, 'scriptTagFilter'], 0, 1);
+        Hooks::addFilter('style_loader_tag', [$this, 'updateLinkAttributes'], 0, 2);
+        Hooks::addFilter('script_loader_tag', [$this, 'updateScriptAttributes'], 0, 1);
     }
 
-    /**
-     * Modify script tags.
-     *
-     * @param string $html   script tag
-     * @param mixed  $handle
-     * @param mixed  $href
-     *
-     * @return string new script tag
-     */
-    public function scriptTagFilter($html)
+    public function updateScriptAttributes($html)
     {
         $slug = Config::SLUG;
+
         $typeAttribute = 'type="module"';
 
-        $scriptsToCheck = [
+        $keys = [
             '-vite-client-helper-MODULE-js',
             '-vite-client-MODULE-js',
             '-index-MODULE-js',
         ];
 
         if (Config::isDev()) {
-            foreach ($scriptsToCheck as $script) {
-                $search = 'id="' . $slug . $script . '"';
-                $replace = $search . ' ' . $typeAttribute;
+            foreach ($keys as $key) {
+                $handle = 'id="' . $slug . $key . '"';
 
-                if (strpos($html, $search) !== false) {
-                    $html = str_replace($search, $replace, $html);
+                if (strpos($html, $handle) !== false) {
+                    $html = str_replace($handle, $handle . ' ' . $typeAttribute, $html);
                 }
             }
         } else {
-            $search = 'id="' . $slug . $scriptsToCheck[2] . '"';
-            $replace = $search . ' ' . $typeAttribute;
+            $handle = 'id="' . $slug . '-index-MODULE-js"';
 
-            if (strpos($html, $search) !== false) {
-                $html = str_replace($search, $replace, $html);
+            if (strpos($html, $handle) !== false) {
+                $html = str_replace($handle, $handle . ' ' . $typeAttribute, $html);
             }
         }
 
         return $html;
     }
 
-    /**
-     * Modify style tags.
-     *
-     * @param string $html   link tag
-     * @param mixed  $handle
-     * @param mixed  $href
-     *
-     * @return string new link tag
-     */
-    public function linkTagFilter($html)
+    public function updateLinkAttributes($html, $handle)
     {
         $slug = Config::SLUG;
 
-        $stylesToCheck = [
-            $slug . '-googleapis-PRECONNECT-css'          => 'rel="preconnect"',
-            $slug . '-gstatic-PRECONNECT-CROSSORIGIN-css' => 'crossorigin rel="crossorigin"',
-        ];
-
-        foreach ($stylesToCheck as $key => $style) {
-            $search = "id='{$key}'";
-
-            if (strpos($html, $search) !== false) {
-                $html = str_replace("rel='stylesheet'", $style, $html);
-            }
+        if (strpos($handle, $slug) === false) {
+            return $html;
         }
 
-        // if (str_contains($handle, 'PRELOAD')) {
-        //     $newTag = preg_replace('/rel=("|\')stylesheet("|\')/', 'rel="preload"', $newTag);
-        // }
+        if (strpos($handle, 'PRECONNECT') !== false) {
+            $html = str_replace("rel='stylesheet'", 'rel="preconnect"', $html);
+        }
 
-        // if (str_contains($handle, 'SCRIPT')) {
-        //     $newTag = preg_replace('/<link /', '<link as="script" ', $newTag);
-        // }
+        if (strpos($handle, 'PRELOAD') !== false) {
+            $html = str_replace("rel='stylesheet'", 'rel="preload"', $html);
+        }
+
+        if (strpos($handle, 'CROSSORIGIN') !== false) {
+            $id = "id='{$handle}-css'";
+            $html = str_replace($id, $id . ' ' . 'crossorigin', $html);
+        }
+
+        if (strpos($html, 'SCRIPT') !== false) {
+            $id = "id='{$handle}-css'";
+            $html = str_replace($id, $id . ' ' . 'as="script"', $html);
+        }
 
         return $html;
     }

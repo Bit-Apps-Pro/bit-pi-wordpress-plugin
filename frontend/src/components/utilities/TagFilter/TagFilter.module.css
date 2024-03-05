@@ -48,21 +48,3 @@
 .tagItem:hover .tagItemTitle {
   max-width: 95px;
 }
-
-.tagList::-webkit-scrollbar-thumb {
-  border-radius: 100px;
-  transition: 0.3s all ease;
-}
-
-.tagList::-webkit-scrollbar {
-  width: 3px;
-  opacity: 0;
-}
-
-.tagList:hover::-webkit-scrollbar-thumb {
-  background-color: var(--bg-15);
-}
-
-.tagList:hover::-webkit-scrollbar-track {
-  background: var(--bg-5);
-}

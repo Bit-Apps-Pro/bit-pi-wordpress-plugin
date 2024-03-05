@@ -1,5 +1,4 @@
 .builderLeftBar {
-  composes: px-2 py-1 from global;
   width: 200px;
   min-width: 200px;
   z-index: 9;
@@ -48,6 +47,7 @@
 
 .searchedResultLabel {
   padding-bottom: 8px;
+  padding-inline: 0.625rem;
   font-size: 16px;
   color: var(--txt);
   border-bottom: 1px solid var(--border-20);
@@ -60,9 +60,4 @@
 .notFound {
   composes: ta-cen mt-4 from global;
   color: var(--bg-30);
-}
-
-.tabPanel {
-  height: calc(100vh - 190px);
-  overflow-y: scroll;
 }

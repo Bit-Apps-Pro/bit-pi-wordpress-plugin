@@ -55,7 +55,7 @@ export default function TagFilter({
   }
 
   const dropdownTags: MenuProps['items'] = tagsList?.map((tag: TagList) => {
-    const textColor = tag.active ? `${token.colorPrimary} !important` : token.colorText
+    const textColor = tag.active ? `#fff !important` : token.colorText
 
     return {
       key: tag.id,
@@ -73,7 +73,7 @@ export default function TagFilter({
                 aria-label={`pin-unpin-tag-${tag.id}`}
               />
             )}
-            <span css={{ marginLeft: 4 }} aria-label={`tag-${tag.id}`}>
+            <span css={{ marginLeft: 4, color: textColor }} aria-label={`tag-${tag.id}`}>
               {tag.label}
             </span>
           </span>
@@ -143,7 +143,7 @@ export default function TagFilter({
           selectedKeys: selectedTags(),
           onSelect: item => onActive(Number(item.key)),
           onDeselect: item => onInactive(Number(item.key)),
-          className: css.tagList
+          className: `${css.tagList} scroller thin`
         }}
         onOpenChange={setIsTagsOpen}
         open={isTagsOpen}

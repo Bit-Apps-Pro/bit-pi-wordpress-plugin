@@ -1,11 +1,10 @@
 import request from '@common/helpers/request'
-import { type UseQueryResult } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 
 export default function useWebhooks(flowId?: number, appSlug?: string) {
-  const { data, isLoading }: UseQueryResult<{ data: WebhooksType }, Error> = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['webhooks', flowId || 'all', appSlug || 'all'],
-    queryFn: async () => request('webhooks', { flowId, appSlug }, null, 'POST')
+    queryFn: async () => request<WebhookType[]>('webhooks', { flowId, appSlug }, null, 'POST')
   })
 
   return {

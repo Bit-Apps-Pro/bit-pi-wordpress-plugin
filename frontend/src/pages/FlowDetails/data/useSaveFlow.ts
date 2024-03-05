@@ -8,7 +8,7 @@ export default function useSaveFlow() {
   const setNavigate = useSetAtom($navigate)
   const setFlowDetails = useSetAtom($flowDetails)
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['save_flow'],
     mutationFn: async (flowData: FlowType) => request<FlowType>('flows/save', flowData),
     onSuccess: saveFlow => {
@@ -20,6 +20,6 @@ export default function useSaveFlow() {
 
   return {
     saveFlow: mutateAsync,
-    isFlowSaving: isLoading
+    isFlowSaving: isPending
   }
 }

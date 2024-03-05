@@ -149,15 +149,6 @@ svg {
   line-height: 1.375 !important;
 }
 
-.mix-tag-input:hover {
-  border-color: #ff4d82 !important;
-}
-
-.mix-tag-input:focus-within {
-  border-color: #ff4d82 !important;
-  outline-color: #ff4d82 !important;
-}
-
 .mtag {
   padding-block: 0 !important;
   line-height: 1.3 !important;
@@ -179,4 +170,55 @@ svg {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+/* scroll bar style */
+.scroller {
+  --scrollbar-color-thumb: #c1c1c1;
+  --scrollbar-color-track: transparent;
+  --scrollbar-width: auto;
+  --scrollbar-width-legacy: 0.75rem;
+}
+
+.scroller.thin {
+  --scrollbar-width: thin;
+  --scrollbar-width-legacy: 0.5rem;
+}
+
+[color-scheme='dark'] .scroller {
+  --scrollbar-color-thumb: #686868;
+}
+
+@supports (scrollbar-width: auto) {
+  .scroller {
+    scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+    scrollbar-width: var(--scrollbar-width);
+  }
+}
+
+@supports selector(::-webkit-scrollbar) {
+  .scroller:hover {
+    --safari-fix: ; /* This custom property forces Safari to re-render the scrollbars on hover */
+  }
+
+  .scroller::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  .scroller::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroller:hover::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color-thumb);
+  }
+
+  .scroller:hover::-webkit-scrollbar-track {
+    background: var(--scrollbar-color-track);
+  }
+
+  .scroller::-webkit-scrollbar {
+    max-width: var(--scrollbar-width-legacy);
+    max-height: var(--scrollbar-width-legacy);
+  }
 }

@@ -11,7 +11,7 @@ export default function useSaveConnection() {
   const { id: nodeId } = useAtomValue($flowSetupModal)
   const setFlowNodes = useSetAtom($flowNodes)
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['save_connection'],
     mutationFn: async (connectionDetails: object) =>
       request<ConnectionType>('connections/save', connectionDetails, null, 'POST'),
@@ -32,6 +32,6 @@ export default function useSaveConnection() {
 
   return {
     saveConnection: mutateAsync,
-    isSavingConnection: isLoading
+    isSavingConnection: isPending
   }
 }

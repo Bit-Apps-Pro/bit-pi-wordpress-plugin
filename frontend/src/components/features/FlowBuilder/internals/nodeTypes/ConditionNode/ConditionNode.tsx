@@ -74,7 +74,7 @@ function ConditionNode({ id, type, isConnectable, deleteNode }: NodePropsType) {
             <Input
               value={flowNode?.machineLabel}
               onChange={e => handleTitleChange(e.target.value)}
-              bordered={false}
+              variant="borderless"
               className={css.titleInput}
             />
             <div className={css.actions}>

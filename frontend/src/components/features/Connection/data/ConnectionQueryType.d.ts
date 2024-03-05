@@ -9,4 +9,4 @@ type ConnectionType = {
   app_slug: AppsSlugType
 }
 
-type ConnectionsType = { data: ConnectionType[] } | undefined
+type ConnectionsType = ConnectionType[]

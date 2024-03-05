@@ -24,21 +24,22 @@ export default function useVariables() {
 
   const { isLoading, data } = useQuery({
     queryKey: ['flows_variables', flowId],
-    queryFn: async () => request<ResponseType[]>(`flows/${flowId}/variables`, null, null, 'GET'),
-    enabled: !!flowId && !Number.isNaN(flowId),
-    onSuccess: res => {
-      if (res.code === 'ERROR') return
+    queryFn: async () => {
+      const res = await request<ResponseType[]>(`flows/${flowId}/variables`, null, null, 'GET')
 
-      const { data: nodes } = res
+      if (res.status === 'success') {
+        res.data?.forEach(node => {
+          setFlowNodes(prev =>
+            create(prev, draft => {
+              draft[node.node_id].variables = formatVariables(node?.variables || [])
+            })
+          )
+        })
+      }
 
-      nodes?.forEach(node => {
-        setFlowNodes(prev =>
-          create(prev, draft => {
-            draft[node.node_id].variables = formatVariables(node?.variables || [])
-          })
-        )
-      })
-    }
+      return res
+    },
+    enabled: !!flowId && !Number.isNaN(flowId)
   })
 
   return {

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 type WebhookDetailsType = { webhook_id: number; flow_id: number }
 
 export default function useUpdateWebhook() {
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ['updateWebhook'],
     mutationFn: async (webhookDetails: WebhookDetailsType) =>
       request<WebhookType>(
@@ -17,6 +17,6 @@ export default function useUpdateWebhook() {
 
   return {
     updateWebhook: mutateAsync,
-    isUpdatingWebhook: isLoading
+    isUpdatingWebhook: isPending
   }
 }
