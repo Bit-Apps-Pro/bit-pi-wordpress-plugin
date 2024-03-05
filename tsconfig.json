@@ -36,10 +36,17 @@
       "@resource/*": ["./frontend/src/resource/*"],
       "@pages/*": ["./frontend/src/pages/*"],
       "@static/*": ["./frontend/src/static/*"],
-      "bit-flow-pro": ["./pro/frontend/*"]
+      "@pro/*": ["./pro/frontend-pro/src/*"]
     }
   },
-  "include": ["frontend/src", "frontend/src/types", "vite.config.mts", "vite.config.wp.ts"],
+  "include": [
+    "frontend/src",
+    "frontend/src/types",
+    "vite.config.mts",
+    "vite.config.wp.ts",
+    "pro/frontend-pro/src",
+    "scripts/"
+  ],
   "exclude": ["node_modules"],
   "types": ["cypress", "node", "@4tw/cypress-drag-drop", "vite/client"]
 }
