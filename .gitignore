@@ -20,3 +20,6 @@ pnpm-lock.yaml
 bun.lockb
 dependencies
 bit-pi.zip
+bit-pi/
+.env
+.vite/
