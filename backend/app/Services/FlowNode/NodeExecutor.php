@@ -56,8 +56,6 @@ class NodeExecutor
 
         $nodeVariableInstance->setVariables($currentNodeInfo->node_id, $response['output']);
 
-        error_log('node id -' . $currentNodeInfo->node_id);
-
         $log['input'] = JSON::maybeEncode($response['input']);
         $log['output'] = JSON::maybeEncode($response['output']);
         $log['status'] = $response['status'];

@@ -274,8 +274,6 @@ abstract class TaskQueueHandler extends AsyncRequest
         session_write_close();
 
         if ($this->isProcessing()) {
-            error_log(' Background process already running');
-
             // Background process already running.
             return $this->maybeWpDie();
         }
@@ -421,12 +419,10 @@ abstract class TaskQueueHandler extends AsyncRequest
     public function handleCronHealthCheck()
     {
         if ($this->isProcessing()) {
-            // Background process already running.
             exit;
         }
 
         if ($this->isQueueEmpty()) {
-            // No data to process.
             $this->clearScheduledEvent();
             exit;
         }
@@ -692,8 +688,6 @@ abstract class TaskQueueHandler extends AsyncRequest
 
     abstract protected function handleTaskTimeout();
 
-    // abstract protected function existsNodeIdNextNodes();
-
     protected function getFlowId()
     {
         return $this->flowId;
@@ -789,7 +783,6 @@ abstract class TaskQueueHandler extends AsyncRequest
             usleep(25000);
 
             if ($this->timeExceeded() || $this->memoryExceeded()) {
-                error_log('parent handle task timeout');
                 $this->handleTaskTimeout();
 
                 break;

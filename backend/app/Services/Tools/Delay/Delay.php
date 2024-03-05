@@ -61,7 +61,6 @@ class Delay
             ];
 
             $isDelayed = wp_schedule_single_event(time() + $interVal, $eventId, $args);
-            error_log('delayed');
 
             return [
                 'flow_history_id' => $flowHistoryId,
@@ -124,11 +123,7 @@ class Delay
                 }
 
                 FlowExecutor::execute($flowNodes, [], $executedIds, $flowHistoryId);
-            } else {
-                error_log('flow nodes not found');
             }
-        } else {
-            error_log('process not found');
         }
     }
 }

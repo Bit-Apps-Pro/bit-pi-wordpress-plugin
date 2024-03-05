@@ -184,13 +184,11 @@ class FlowExecutor extends TaskQueueHandler
 
             NodeExecutorService::saveNodeVariables($this->getFlowId(), $variables);
         }
-        error_log('flow complete...');
     }
 
     protected function handleTaskTimeout()
     {
         $logs = LogManager::getLogs();
-        error_log('Handle Task TimeOut');
         LogService::save($logs);
     }
 }
