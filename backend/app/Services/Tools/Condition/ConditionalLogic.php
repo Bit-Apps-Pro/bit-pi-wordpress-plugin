@@ -2,8 +2,8 @@
 
 namespace BitApps\Pi\Services\Tools\Condition;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
 use BitApps\Pi\Helpers\FieldManipulation;
+use BitApps\WPKit\Helpers\JSON;
 
 class ConditionalLogic
 {

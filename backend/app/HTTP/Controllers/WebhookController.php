@@ -3,11 +3,11 @@
 namespace BitApps\Pi\HTTP\Controllers;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\HTTP\Requests\WebhookIndexRequest;
 use BitApps\Pi\HTTP\Requests\WebhookRequest;
 use BitApps\Pi\HTTP\Requests\WebhookUpdateRequest;
 use BitApps\Pi\Model\Webhook;
+use BitApps\WPKit\Http\Response;
 
 final class WebhookController
 {

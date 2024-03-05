@@ -2,13 +2,13 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Helpers\Hash;
 use BitApps\Pi\HTTP\Requests\ConnectionIndexRequest;
 use BitApps\Pi\HTTP\Requests\ConnectionStoreRequest;
 use BitApps\Pi\Model\Connection;
+use BitApps\WPKit\Helpers\JSON;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 final class ConnectionController
 {

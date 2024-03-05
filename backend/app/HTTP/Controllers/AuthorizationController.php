@@ -2,9 +2,9 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Client\HttpClient;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\HTTP\Requests\RefreshTokenRequest;
+use BitApps\WPKit\Http\Client\HttpClient;
+use BitApps\WPKit\Http\Response;
 
 final class AuthorizationController
 {

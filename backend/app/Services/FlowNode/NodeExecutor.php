@@ -2,7 +2,6 @@
 
 namespace BitApps\Pi\Services\FlowNode;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
 use BitApps\Pi\Helpers\Node;
 use BitApps\Pi\Services\Exception\MissingKeyException;
 use BitApps\Pi\Services\Exception\PlatformNotFoundException;
@@ -10,6 +9,7 @@ use BitApps\Pi\Services\GlobalNodeVariables;
 use BitApps\Pi\Services\Log\LogManager;
 use BitApps\Pi\Services\Tools\Condition\ConditionalLogic;
 use BitApps\Pi\Services\Tools\Delay\Delay;
+use BitApps\WPKit\Helpers\JSON;
 
 class NodeExecutor
 {

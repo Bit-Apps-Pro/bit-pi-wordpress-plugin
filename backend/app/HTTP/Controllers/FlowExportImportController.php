@@ -2,10 +2,10 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Model\Flow;
 use BitApps\Pi\Services\FlowImportExportService;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 class FlowExportImportController
 {

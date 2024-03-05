@@ -3,8 +3,8 @@
 namespace BitApps\Pi\Providers;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
-use BitApps\Pi\Deps\BitApps\WPKit\Installer;
+use BitApps\WPKit\Hooks\Hooks;
+use BitApps\WPKit\Installer;
 
 final class InstallerProvider
 {
@@ -75,14 +75,14 @@ final class InstallerProvider
     public static function migration()
     {
         $migrations = [
-            'BITPIFlowsTableMigration',
-            'BITPIWebhooksTableMigration',
-            'BITPIFlowNodesTableMigration',
-            'BITPITagsTableMigration',
-            'BITPIAppConnectionsTableMigration',
-            'BITPIFlowHistoryTableMigration',
-            'BITPIFlowLogsTableMigration',
-            'BITPIPluginOptions',
+            'BitAppsPiFlowsTableMigration',
+            'BitAppsPiWebhooksTableMigration',
+            'BitAppsPiFlowNodesTableMigration',
+            'BitAppsPiTagsTableMigration',
+            'BitAppsPiAppConnectionsTableMigration',
+            'BitAppsPiFlowHistoryTableMigration',
+            'BitAppsPiFlowLogsTableMigration',
+            'BitAppsPiPluginOptions',
         ];
 
         return [
@@ -99,14 +99,14 @@ final class InstallerProvider
     public static function drop()
     {
         $migrations = [
-            'BITPIFlowNodesTableMigration',
-            'BITPIFlowLogsTableMigration',
-            'BITPIFlowHistoryTableMigration',
-            'BITPIWebhooksTableMigration',
-            'BITPIFlowsTableMigration',
-            'BITPITagsTableMigration',
-            'BITPIAppConnectionsTableMigration',
-            'BITPIPluginOptions',
+            'BitAppsPiFlowNodesTableMigration',
+            'BitAppsPiFlowLogsTableMigration',
+            'BitAppsPiFlowHistoryTableMigration',
+            'BitAppsPiWebhooksTableMigration',
+            'BitAppsPiFlowsTableMigration',
+            'BitAppsPiTagsTableMigration',
+            'BitAppsPiAppConnectionsTableMigration',
+            'BitAppsPiPluginOptions',
         ];
 
         return [

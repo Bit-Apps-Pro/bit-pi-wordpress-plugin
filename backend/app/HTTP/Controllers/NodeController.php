@@ -3,12 +3,12 @@
 namespace BitApps\Pi\HTTP\Controllers;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\HTTP\Requests\NodeStoreRequest;
 use BitApps\Pi\Model\Connection;
 use BitApps\Pi\Model\FlowNode;
 use BitApps\Pi\Model\Webhook;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 final class NodeController
 {

@@ -2,10 +2,10 @@
 
 namespace BitApps\Pi\Services\Apps\WebHook;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Client\HttpClient;
 use BitApps\Pi\Helpers\FieldManipulation;
 use BitApps\Pi\Services\FlowNode\NodeInfoProvider;
 use BitApps\Pi\Services\Interfaces\ActionInterface;
+use BitApps\WPKit\Http\Client\HttpClient;
 
 class WebHookAction implements ActionInterface
 {

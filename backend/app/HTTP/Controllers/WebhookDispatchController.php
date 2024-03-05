@@ -2,13 +2,13 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Model\Flow;
 use BitApps\Pi\Model\FlowNode;
 use BitApps\Pi\Model\Webhook;
 use BitApps\Pi\Services\Flow\FlowExecutor;
+use BitApps\WPKit\Helpers\JSON;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 final class WebhookDispatchController
 {

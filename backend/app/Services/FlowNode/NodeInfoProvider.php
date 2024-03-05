@@ -2,8 +2,8 @@
 
 namespace BitApps\Pi\Services\FlowNode;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
 use BitApps\Pi\Helpers\FieldManipulation;
+use BitApps\WPKit\Helpers\JSON;
 
 class NodeInfoProvider
 {

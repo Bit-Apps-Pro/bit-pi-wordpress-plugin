@@ -1,6 +1,5 @@
 <?php
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Router\Route;
 use BitApps\Pi\HTTP\Controllers\AuthorizationController;
 use BitApps\Pi\HTTP\Controllers\CommonController;
 use BitApps\Pi\HTTP\Controllers\ConnectionController;
@@ -12,6 +11,7 @@ use BitApps\Pi\HTTP\Controllers\TagController;
 use BitApps\Pi\HTTP\Controllers\WebhookController;
 use BitApps\Pi\HTTP\Controllers\WebhookDispatchController;
 use BitApps\Pi\Services\Flow\FlowExecutor;
+use BitApps\WPKit\Http\Router\Route;
 
 if (!defined('ABSPATH')) {
     exit;

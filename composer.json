@@ -11,9 +11,10 @@
   ],
   "require": {
     "php": ">=7.4",
-    "bitapps/wp-validator": "dev-mazed-dev",
-    "bitapps/wp-kit": "dev-main",
-    "bitapps/wp-database": "dev-main"
+    "bitapps/wp-validator": "^1",
+    "bitapps/wp-kit": "^1",
+    "bitapps/wp-database": "^1",
+    "automattic/jetpack-autoloader": "^3"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.40",
@@ -24,7 +25,6 @@
     "phpcompatibility/phpcompatibility-wp": "*",
     "spatie/phpunit-watcher": "^1.23",
     "nunomaduro/phpinsights": "^2.11",
-    "brianhenryie/strauss": "^0.14.1",
     "wp-cli/wp-cli": "^2.9.0"
   },
   "autoload": {
@@ -32,10 +32,7 @@
       "BitApps\\Pi\\": "./backend/app",
       "BitApps\\Pi\\ComposerScripts\\": "./bin/composer",
       "BitApps\\Pi\\Fixers\\": "./custom-fixers"
-    },
-    "classmap": [
-      "./dependencies"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
@@ -43,9 +40,6 @@
     }
   },
   "scripts": {
-    "strauss": [
-      "vendor/bin/strauss"
-    ],
     "clean": "rm -rf ./vendor && rm composer.lock && rm -rf ./dependencies",
     "reset": "composer clean && composer install",
     "lint": "./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
@@ -56,18 +50,6 @@
     "compat": "composer bit-flow-compat && composer bit-flow-pro-compat",
     "test:watch": "./vendor/bin/phpunit-watcher watch",
     "insights": "./vendor/bin/phpinsights",
-    "pre-install-cmd": [
-      "BitApps\\Pi\\ComposerScripts\\NamespaceUpdater::preInstall"
-    ],
-    "pre-update-cmd": [
-      "BitApps\\Pi\\ComposerScripts\\NamespaceUpdater::preUpdate"
-    ],
-    "post-install-cmd": [
-      "BitApps\\Pi\\ComposerScripts\\NamespaceUpdater::postInstall"
-    ],
-    "post-update-cmd": [
-      "BitApps\\Pi\\ComposerScripts\\NamespaceUpdater::postUpdate"
-    ],
     "pi": "./vendor/wp-cli/wp-cli/bin/wp bit-pi",
     "db": "composer pi db",
     "use:pro-plugin": "composer pi use moveToPlugins",
@@ -78,21 +60,8 @@
   },
   "config": {
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
-  },
-  "extra": {
-    "strauss": {
-      "target_directory": "dependencies",
-      "namespace_prefix": "BitApps\\Pi\\Deps\\",
-      "classmap_prefix": "BITPI_",
-      "constant_prefix": "BITPI_",
-      "include_author": false,
-      "classmap_output": false,
-      "delete_vendor_packages": true,
-      "delete_vendor_files": true,
-      "copy_static_files": [],
-      "delete_static_files": []
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "automattic/jetpack-autoloader": true
     }
   }
 }

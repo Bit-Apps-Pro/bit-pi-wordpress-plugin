@@ -3,11 +3,11 @@
 namespace BitApps\Pi\Providers;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\RequestType;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Router\Router;
 use BitApps\Pi\Plugin;
 use BitApps\Pi\Services\Tools\Delay\Delay;
+use BitApps\WPKit\Hooks\Hooks;
+use BitApps\WPKit\Http\RequestType;
+use BitApps\WPKit\Http\Router\Router;
 use FilesystemIterator;
 
 class HookProvider
@@ -24,7 +24,7 @@ class HookProvider
         Hooks::addAction(Config::VAR_PREFIX . 'execute_delayed_flow', [Delay::class, 'executeDelayedFlow'], 10, 2);
         Hooks::addFilter('safe_style_css', [$this, 'allowDisplayStyleAttribute']);
 
-        if (\defined('BIT_PI_CLI_ACTIVE') && BIT_PI_CLI_ACTIVE) {
+        if (isset($_ENV['CLI_ACTIVE']) && $_ENV['CLI_ACTIVE']) {
             include_once __DIR__ . './../../../cli/Register.php';
         }
     }

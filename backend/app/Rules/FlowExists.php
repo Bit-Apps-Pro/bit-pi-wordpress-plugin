@@ -2,8 +2,8 @@
 
 namespace BitApps\Pi\Rules;
 
-use BitApps\Pi\Deps\BitApps\WPValidator\Rule;
 use BitApps\Pi\Model\Flow;
+use BitApps\WPValidator\Rule;
 
 final class FlowExists extends Rule
 {

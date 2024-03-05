@@ -2,8 +2,8 @@
 
 namespace BitApps\Pi\Services\Authorization;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Client\HttpClient;
 use BitApps\Pi\Model\Connection;
+use BitApps\WPKit\Http\Client\HttpClient;
 
 abstract class AbstractAuthorization
 {

@@ -1,8 +1,8 @@
 <?php
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Router\Route;
 use BitApps\Pi\HTTP\Controllers\RedirectController;
 use BitApps\Pi\HTTP\Controllers\WebhookDispatchController;
+use BitApps\WPKit\Http\Router\Route;
 
 if (!defined('ABSPATH')) {
     exit;

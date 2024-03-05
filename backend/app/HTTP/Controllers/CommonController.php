@@ -2,10 +2,10 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Client\HttpClient;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Helpers\Hash;
 use BitApps\Pi\HTTP\Requests\ProxyRequest;
+use BitApps\WPKit\Http\Client\HttpClient;
+use BitApps\WPKit\Http\Response;
 
 final class CommonController
 {

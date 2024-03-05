@@ -2,7 +2,7 @@
 
 namespace BitApps\Pi\HTTP\Requests;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Request\Request;
 
 class WebhookRequest extends Request
 {

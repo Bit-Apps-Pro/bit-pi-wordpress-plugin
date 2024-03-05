@@ -5,9 +5,9 @@
 namespace BitApps\Pi\Views;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\DateTimeHelper;
-use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
-use BitApps\Pi\Deps\BitApps\WPKit\Utils\Capabilities;
+use BitApps\WPKit\Helpers\DateTimeHelper;
+use BitApps\WPKit\Hooks\Hooks;
+use BitApps\WPKit\Utils\Capabilities;
 
 /**
  * The admin Layout and page handler class.

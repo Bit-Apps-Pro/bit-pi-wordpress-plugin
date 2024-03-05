@@ -3,11 +3,11 @@
 namespace BitApps\Pi\Services\Tools\Delay;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
 use BitApps\Pi\Model\Flow;
 use BitApps\Pi\Model\FlowLog;
 use BitApps\Pi\Services\Flow\FlowExecutor;
 use BitApps\Pi\Services\FlowNode\NodeInfoProvider;
+use BitApps\WPKit\Helpers\JSON;
 
 class Delay
 {

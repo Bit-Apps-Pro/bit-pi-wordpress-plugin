@@ -2,11 +2,11 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\Arr;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Model\FlowHistory;
 use BitApps\Pi\Model\FlowNode;
+use BitApps\WPKit\Helpers\Arr;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 final class HistoryController
 {

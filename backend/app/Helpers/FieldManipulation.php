@@ -2,9 +2,9 @@
 
 namespace BitApps\Pi\Helpers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
 use BitApps\Pi\Services\FunctionExecutor;
 use BitApps\Pi\Services\GlobalNodeVariables;
+use BitApps\WPKit\Helpers\JSON;
 
 if (!\defined('ABSPATH')) {
     exit;

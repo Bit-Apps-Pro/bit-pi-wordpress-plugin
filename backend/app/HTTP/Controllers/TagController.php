@@ -2,9 +2,9 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Helpers\Slug;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
 use BitApps\Pi\Model\Tag;
+use BitApps\WPKit\Helpers\Slug;
+use BitApps\WPKit\Http\Request\Request;
 use WP_Error;
 
 final class TagController

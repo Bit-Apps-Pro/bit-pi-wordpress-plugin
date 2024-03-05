@@ -3,8 +3,8 @@
 namespace BitApps\Pi\HTTP\Middleware;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
+use BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Response;
 
 final class NonceCheckerMiddleware
 {

@@ -5,7 +5,7 @@
 namespace BitApps\Pi\Views;
 
 use BitApps\Pi\Config;
-use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
+use BitApps\WPKit\Hooks\Hooks;
 
 final class HtmlTagModifier
 {

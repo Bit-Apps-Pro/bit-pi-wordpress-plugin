@@ -8,17 +8,17 @@ namespace BitApps\Pi;
  * @since 1.0.0-alpha
  */
 
-use BitApps\Pi\Deps\BitApps\WPDatabase\Connection;
-use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
-use BitApps\Pi\Deps\BitApps\WPKit\Http\RequestType;
-use BitApps\Pi\Deps\BitApps\WPKit\Migration\MigrationHelper;
-use BitApps\Pi\Deps\BitApps\WPKit\Utils\Capabilities;
 use BitApps\Pi\HTTP\Middleware\AdminCheckerMiddleware;
 use BitApps\Pi\HTTP\Middleware\NonceCheckerMiddleware;
 use BitApps\Pi\Providers\HookProvider;
 use BitApps\Pi\Providers\InstallerProvider;
 use BitApps\Pi\Views\HtmlTagModifier;
 use BitApps\Pi\Views\Layout;
+use BitApps\WPDatabase\Connection;
+use BitApps\WPKit\Hooks\Hooks;
+use BitApps\WPKit\Http\RequestType;
+use BitApps\WPKit\Migration\MigrationHelper;
+use BitApps\WPKit\Utils\Capabilities;
 
 final class Plugin
 {

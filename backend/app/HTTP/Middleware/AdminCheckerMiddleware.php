@@ -2,8 +2,8 @@
 
 namespace BitApps\Pi\HTTP\Middleware;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
-use BitApps\Pi\Deps\BitApps\WPKit\Utils\Capabilities;
+use BitApps\WPKit\Http\Response;
+use BitApps\WPKit\Utils\Capabilities;
 
 final class AdminCheckerMiddleware
 {

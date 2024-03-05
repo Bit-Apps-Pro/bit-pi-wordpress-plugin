@@ -2,7 +2,7 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
+use BitApps\WPKit\Http\Request\Request;
 use WP_Error;
 
 final class RedirectController
