@@ -33,7 +33,7 @@ class Config
 
     public const APP_BASE = '../../' . self::SLUG . '.php';
 
-    public const DEV_URL = 'http://localhost:3000/wp-content/plugins/bit-flow/frontend/src';
+    public const CLASS_PREFIX = 'BitAppsPi';
 
     /**
      * Provides configuration for plugin.
@@ -72,6 +72,9 @@ class Config
                     'base'      => get_rest_url() . self::SLUG . '/v1',
                     'separator' => $wp_rewrite->permalink_structure ? '?' : '&',
                 ];
+
+            case 'DEV_URL':
+                return isset($_ENV['DEV_URL']) ? $_ENV['DEV_URL'] : Config::DEV_URL;
 
             case 'ROOT_URI':
                 return set_url_scheme(plugins_url('', self::get('MAIN_FILE')), wp_parse_url(home_url())['scheme']);
@@ -161,12 +164,12 @@ class Config
 
     public static function isDev()
     {
-        return \defined('BIT_PI_DEV') && BIT_PI_DEV;
+        return isset($_ENV['DEV']) ? $_ENV['DEV'] : false;
     }
 
     public static function isDevPro()
     {
-        return \defined('BIT_PI_PRO_ACTIVE') && BIT_PI_PRO_ACTIVE;
+        return isset($_ENV['PRO_ACTIVE']) ? $_ENV['PRO_ACTIVE'] : false;
     }
 
     /**
