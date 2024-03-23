@@ -17,6 +17,8 @@ class Config
 {
     public const SLUG = 'bit-pi';
 
+    public const PRO_PLUGIN_SLUG = 'bit-pi-pro';
+
     public const TITLE = 'Bit Pi';
 
     public const VAR_PREFIX = 'bit_pi_';
@@ -74,7 +76,7 @@ class Config
                 ];
 
             case 'DEV_URL':
-                return isset($_ENV['DEV_URL']) ? $_ENV['DEV_URL'] : Config::DEV_URL;
+                return isset($_ENV['DEV_URL']) ? $_ENV['DEV_URL'] : null;
 
             case 'ROOT_URI':
                 return set_url_scheme(plugins_url('', self::get('MAIN_FILE')), wp_parse_url(home_url())['scheme']);
@@ -114,6 +116,18 @@ class Config
     public static function withPrefix($option)
     {
         return self::VAR_PREFIX . $option;
+    }
+
+    /**
+     * Prefixed table name with db prefix and var prefix.
+     *
+     * @param mixed $table
+     *
+     * @return string
+     */
+    public static function withDBPrefix($table)
+    {
+        return self::get('WP_DB_PREFIX') . self::withPrefix($table);
     }
 
     /**
@@ -162,14 +176,14 @@ class Config
         return update_option(self::withPrefix($option), $value, !\is_null($autoload) ? 'yes' : null);
     }
 
+    public static function deleteOption($option)
+    {
+        return delete_option(self::withPrefix($option));
+    }
+
     public static function isDev()
     {
         return isset($_ENV['DEV']) ? $_ENV['DEV'] : false;
-    }
-
-    public static function isDevPro()
-    {
-        return isset($_ENV['PRO_ACTIVE']) ? $_ENV['PRO_ACTIVE'] : false;
     }
 
     /**

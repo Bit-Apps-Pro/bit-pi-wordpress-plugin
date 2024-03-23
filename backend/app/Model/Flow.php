@@ -2,6 +2,7 @@
 
 namespace BitApps\Pi\Model;
 
+use BitApps\Pi\Config;
 use BitApps\WPDatabase\Model;
 
 /**
@@ -29,6 +30,8 @@ class Flow extends Model
     ];
 
     public const TOOLS = 'tools';
+
+    protected $prefix = Config::VAR_PREFIX;
 
     protected $casts = [
         'id'              => 'int',

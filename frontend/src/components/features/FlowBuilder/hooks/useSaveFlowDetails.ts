@@ -11,6 +11,8 @@ export default function useSaveFlowDetails() {
 
   useMemoDebounce(
     async () => {
+      if (!flowDetails.id) return
+
       const flowData = {
         id: flowDetails.id,
         flow: {

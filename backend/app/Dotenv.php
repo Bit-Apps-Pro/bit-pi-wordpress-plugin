@@ -2,41 +2,76 @@
 
 namespace BitApps\Pi;
 
+use WP_CLI;
+
 if (!\defined('ABSPATH')) {
     exit;
 }
 
 final class Dotenv
 {
-    public static function load($filePath)
+    public static function load($path = '')
     {
-        if (!file_exists($filePath)) {
+        if (!file_exists($path)) {
             return false;
         }
 
-        $envData = file_get_contents($filePath);
-
-        $envVariables = explode("\n", $envData);
-
-        foreach ($envVariables as $variable) {
-            if (empty($variable) || $variable[0] === '#') {
+        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (strpos(trim($line), '#') === 0) {
                 continue;
             }
 
-            list($key, $value) = explode('=', $variable, 2);
+            list($name, $value) = explode('=', $line, 2);
+            $name = trim($name);
+            $value = trim($value);
 
-            $value = trim($value, " \t\n\r\0\x0B\"");
-            $key = trim($key, " \t\n\r\0\x0B\"");
+            if (is_numeric($value)) {
+                $value = $value + 0; // Converts to int or float
+            } elseif (strtolower($value) == 'true' || strtolower($value) == 'false') {
+                $value = strtolower($value) == 'true'; // Converts to boolean
+            }
 
-            if (!isset($_ENV[$key])) {
-                if (\in_array($value, ['true',  '1'])) {
-                    $_ENV[$key] = true;
-                } elseif (\in_array($value, ['false', '0'])) {
-                    $_ENV[$key] = false;
-                } else {
-                    $_ENV[$key] = $value;
-                }
+            if (!\array_key_exists($name, $_ENV)) {
+                $_ENV[$name] = $value;
             }
         }
+    }
+
+    public static function setEnv($key, $flag)
+    {
+        $envFilePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '../../.env');
+
+        $lines = file($envFilePath, FILE_IGNORE_NEW_LINES);
+
+        $value = $flag ? 'true' : 'false';
+        $pattern = "/^{$key}\s*=\s*(.*)/m";
+        $envKeyValue = "{$key} = {$value}";
+
+        $found = false;
+        foreach ($lines as &$line) {
+            if (preg_match($pattern, $line)) {
+                $line = $envKeyValue;
+                $found = true;
+
+                break;
+            }
+        }
+        unset($line);
+
+        if (!$found) {
+            $lines[] = $envKeyValue;
+        }
+
+        $envData = implode("\n", $lines);
+
+        $isContentUpdated = file_put_contents($envFilePath, $envData);
+
+        if ($isContentUpdated === false) {
+            WP_CLI::error(sprintf('Error writing to the file %s!', $isContentUpdated));
+            exit;
+        }
+
+        return $isContentUpdated;
     }
 }

@@ -1,12 +1,16 @@
 import request from '@common/helpers/request'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+interface WebhookSaveDetails extends WebhookDetailsType {
+  flow_id?: number
+}
+
 export default function useSaveWebhook(flowId?: number) {
   const queryClient = useQueryClient()
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['saveWebhook'],
-    mutationFn: async (webhookDetails: WebhookDetailsType & { flow_id: number }) =>
+    mutationFn: async (webhookDetails: WebhookSaveDetails) =>
       request<WebhookType>('webhooks/save', webhookDetails, null, 'POST'),
     onSuccess: res => {
       if (!res.data) return

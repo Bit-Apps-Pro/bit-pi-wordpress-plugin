@@ -58,7 +58,7 @@ export default function HookListener({ wrapperClassName }: HookListenerType) {
 
       <If conditions={isListening}>
         <Space align="baseline">
-          <Button danger onClick={stopListenHandle} icon={<LucideIcn name="stop-circle" size={16} />}>
+          <Button danger onClick={stopListenHandle} icon={<LucideIcn name="circle-stop" size={16} />}>
             Stop
           </Button>
           <LoadingOutlined size={16} />

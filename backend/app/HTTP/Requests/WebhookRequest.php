@@ -9,7 +9,7 @@ class WebhookRequest extends Request
     public function rules()
     {
         return [
-            'flow_id'  => ['required', 'integer'],
+            'flow_id'  => ['nullable', 'integer'],
             'title'    => ['required', 'string', 'sanitize:text'],
             'app_slug' => ['required', 'string', 'sanitize:text'],
         ];

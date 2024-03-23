@@ -15,8 +15,8 @@ import { useAtom, useAtomValue } from 'jotai'
 
 const Flows = loadable(() => import('@pages/Flows'), { fallback: <FlowPageLoaderSkeleton /> })
 const FlowDetails = loadable(() => import('@pages/FlowDetails'), { fallback: <div>Loading...</div> })
-// const Connections = loadable(() => import('@pages/Connections'), { fallback: <div>Loading...</div> })
-// const Webhooks = loadable(() => import('@pages/Webhooks'), { fallback: <div>Loading...</div> })
+const Connections = loadable(() => import('@pages/Connections'), { fallback: <div>Loading...</div> })
+const Webhooks = loadable(() => import('@pages/Webhooks'), { fallback: <div>Loading...</div> })
 const Support = loadable(() => import('@pages/Support'), { fallback: <div>Loading...</div> })
 const Error404 = loadable(() => import('@pages/Error404'), { fallback: <div>Loading...</div> })
 
@@ -58,8 +58,8 @@ export default function AppRoutes() {
             <Route path="/flows/details/:flowId" element={<FlowDetails />} />
             <Route path="/flow/create" element={<FlowDetails />} />
 
-            {/* <Route path="/connections" element={<Connections />} /> */}
-            {/* <Route path="/webhooks" element={<Webhooks />} /> */}
+            <Route path="/connections" element={<Connections />} />
+            <Route path="/webhooks" element={<Webhooks />} />
 
             <Route path="/support" element={<Support />} />
 

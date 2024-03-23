@@ -42,7 +42,7 @@ export default function TestFlowButton() {
       shape="round"
       type="primary"
       size="large"
-      icon={<LucideIcn name={isListening ? 'stop-circle' : 'play'} />}
+      icon={<LucideIcn name={isListening ? 'circle-stop' : 'play'} />}
       onClick={isListening ? stopListenHandle : startListen}
       css={{
         '&:hover': {

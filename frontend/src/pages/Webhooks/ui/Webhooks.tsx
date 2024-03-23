@@ -1,7 +1,7 @@
 import useDeleteWebhook from '@features/Webhook/data/useDeleteWebhook'
 import useWebhooks from '@features/Webhook/data/useWebhooks'
 import LucideIcn from '@icons/LucideIcn'
-import { Button, List, Popconfirm, Space, Typography } from 'antd'
+import { Button, Divider, List, Popconfirm, Space, Typography } from 'antd'
 
 const { Title, Text, Link } = Typography
 
@@ -12,6 +12,8 @@ export default function Webhooks() {
   return (
     <div className="p-6">
       <Title level={3}>Webhooks</Title>
+
+      <Divider style={{ marginTop: 6 }} />
 
       <List
         loading={isWebhookLoading}

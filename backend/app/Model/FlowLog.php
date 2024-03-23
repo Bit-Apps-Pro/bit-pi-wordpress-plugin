@@ -2,6 +2,7 @@
 
 namespace BitApps\Pi\Model;
 
+use BitApps\Pi\Config;
 use BitApps\WPDatabase\Model;
 
 /**
@@ -13,6 +14,8 @@ class FlowLog extends Model
         'SUCCESS' => 'success',
         'ERROR'   => 'error',
     ];
+
+    protected $prefix = Config::VAR_PREFIX;
 
     protected $casts = [
         'id'              => 'int',

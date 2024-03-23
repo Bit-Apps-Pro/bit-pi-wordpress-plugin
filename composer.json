@@ -12,8 +12,9 @@
   "require": {
     "php": ">=7.4",
     "bitapps/wp-validator": "^1",
-    "bitapps/wp-kit": "^1",
-    "bitapps/wp-database": "^1",
+    "bitapps/wp-database": "^1.2",
+    "bitapps/wp-telemetry": "^0.0.4",
+    "bitapps/wp-kit": "^1.2",
     "automattic/jetpack-autoloader": "^3"
   },
   "require-dev": {
@@ -25,12 +26,12 @@
     "phpcompatibility/phpcompatibility-wp": "*",
     "spatie/phpunit-watcher": "^1.23",
     "nunomaduro/phpinsights": "^2.11",
-    "wp-cli/wp-cli": "^2.9.0"
+    "symfony/var-dumper": "^5.4",
+    "wp-cli/wp-cli-bundle": "^2.10"
   },
   "autoload": {
     "psr-4": {
       "BitApps\\Pi\\": "./backend/app",
-      "BitApps\\Pi\\ComposerScripts\\": "./bin/composer",
       "BitApps\\Pi\\Fixers\\": "./custom-fixers"
     }
   },
@@ -52,9 +53,8 @@
     "insights": "./vendor/bin/phpinsights",
     "pi": "./vendor/wp-cli/wp-cli/bin/wp bit-pi",
     "db": "composer pi db",
-    "use:pro-plugin": "composer pi use moveToPlugins",
-    "use:pro-local": "composer pi use togglePro -- --active=y",
-    "use:free-only": "composer pi use togglePro -- --active=n",
+    "use:pro-plugin": "composer pi use enableProPlugin",
+    "use:free-only": "composer pi use switchToFreePlugin",
     "use:prod": "composer pi use toggleDevStatus -- --active=n",
     "use:dev": "composer pi use toggleDevStatus -- --active=y"
   },

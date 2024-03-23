@@ -2,7 +2,7 @@ import useConnections from '@features/Connection/data/useConnections'
 import useDeleteConnection from '@features/Connection/data/useDeleteConnection'
 import { getAppBySlug } from '@features/FlowBuilder/helpers/FlowBuilderHelper'
 import LucideIcn from '@icons/LucideIcn'
-import { Avatar, Button, List, Popconfirm, Skeleton, Typography } from 'antd'
+import { Avatar, Button, Divider, List, Popconfirm, Skeleton, Typography } from 'antd'
 
 import css from './Connections.module.css'
 import cItemCss from './Connections.style'
@@ -16,6 +16,8 @@ export default function Connections() {
   return (
     <div className="p-6">
       <Title level={3}>Connections</Title>
+
+      <Divider style={{ marginTop: 6 }} />
 
       <List
         loading={isConnectionLoading}

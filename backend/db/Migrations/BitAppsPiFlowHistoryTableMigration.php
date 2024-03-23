@@ -1,7 +1,9 @@
 <?php
 
+use BitApps\Pi\Config;
 use BitApps\Pi\Model\FlowHistory;
 use BitApps\WPDatabase\Blueprint;
+use BitApps\WPDatabase\Connection;
 use BitApps\WPDatabase\Schema;
 use BitApps\WPKit\Migration\Migration;
 
@@ -13,7 +15,7 @@ final class BitAppsPiFlowHistoryTableMigration extends Migration
 {
     public function up(): void
     {
-        Schema::create(
+        Schema::withPrefix(Connection::wpPrefix() . Config::VAR_PREFIX)->create(
             'flow_histories',
             function (Blueprint $table): void {
                 $table->id();
@@ -26,6 +28,6 @@ final class BitAppsPiFlowHistoryTableMigration extends Migration
 
     public function down(): void
     {
-        Schema::drop('flow_histories');
+        Schema::withPrefix(Connection::wpPrefix() . Config::VAR_PREFIX)->drop('flow_histories');
     }
 }

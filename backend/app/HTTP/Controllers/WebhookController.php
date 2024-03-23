@@ -57,20 +57,21 @@ final class WebhookController
      */
     public function store(WebhookRequest $request)
     {
-        $table = Config::get('WP_DB_PREFIX') . Config::VAR_PREFIX . 'webhooks';
         $validated = $request->validated();
 
-        // TODO: replace raw query if possible
-        Webhook::raw('UPDATE ' . $table . ' SET flow_id = null WHERE flow_id = %d', $validated['flow_id']);
-
-        $webhookSlug = wp_generate_uuid4();
-
-        $insert = Webhook::insert([
+        $webhookData = [
             'title'        => $validated['title'],
             'app_slug'     => $validated['app_slug'],
-            'flow_id'      => $validated['flow_id'],
-            'webhook_slug' => $webhookSlug
-        ]);
+            'webhook_slug' => wp_generate_uuid4()
+        ];
+
+        if (isset($validated['flow_id'])) {
+            $this->removeWebhookByFlowId($validated['flow_id']);
+
+            $webhookData['flow_id'] = $validated['flow_id'];
+        }
+
+        $insert = Webhook::insert($webhookData);
 
         if (!$insert) {
             return Response::error('Error creating webhook');
@@ -78,10 +79,10 @@ final class WebhookController
 
         return Response::success([
             'id'           => $insert->id,
-            'title'        => $validated['title'],
+            'title'        => $insert->title,
             'app_slug'     => $insert->app_slug,
-            'webhook_slug' => $webhookSlug,
-            'url'          => $this->webhookPrefix . $webhookSlug,
+            'webhook_slug' => $insert->webhook_slug,
+            'url'          => $this->webhookPrefix . $insert->webhook_slug,
         ]);
     }
 
@@ -96,14 +97,18 @@ final class WebhookController
     {
         $validated = $request->validated();
 
-        $table = Config::get('WP_DB_PREFIX') . Config::VAR_PREFIX . 'webhooks';
-
-        // TODO: replace raw query if possible
-        Webhook::raw('UPDATE ' . $table . ' SET flow_id = null WHERE flow_id = %d', $validated['flow_id']);
+        $this->removeWebhookByFlowId($validated['flow_id']);
 
         $webhook->update(['flow_id' => $validated['flow_id']])->save();
 
         return Response::success(['id' => $webhook->id]);
+    }
+
+    public function removeWebhookByFlowId($flowId)
+    {
+        // TODO: replace raw query if possible
+
+        Webhook::raw('UPDATE ' . Config::withDBPrefix('webhooks') . ' SET flow_id = null WHERE flow_id = %d', $flowId);
     }
 
     /**

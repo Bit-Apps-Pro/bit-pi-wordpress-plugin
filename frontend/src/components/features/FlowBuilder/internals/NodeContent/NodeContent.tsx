@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react'
+
 import { $appConfig } from '@common/globalStates'
 import { clsx } from '@common/helpers/globalHelpers'
 import { extractNodeId } from '@features/FlowBuilder/helpers/FlowBuilderHelper'
@@ -13,7 +15,7 @@ import nodeContentStyle from './nodeContentStyle'
 interface NodeContentProps {
   title: string
   subTitle?: string
-  icon?: string
+  icon?: ReactNode
   color?: string
   triggerNode?: boolean
   badgeText: string
@@ -37,7 +39,7 @@ export default function NodeContent({
   return (
     <div className={cls.nodeWrp} data-testid="flow-node" data-node-id={badgeText}>
       <div aria-label="Flow App Item" className={clsx([cls.node, triggerNode && cls.inputNode])}>
-        {icon ? (
+        {icon && typeof icon === 'string' ? (
           <img
             src={icon}
             alt={`${title} logo`}

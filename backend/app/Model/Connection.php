@@ -2,6 +2,7 @@
 
 namespace BitApps\Pi\Model;
 
+use BitApps\Pi\Config;
 use BitApps\WPDatabase\Model;
 
 /**
@@ -12,8 +13,10 @@ class Connection extends Model
     public const STATUS = [
         'verified' => 1,
         'pending'  => 2,
-        'failed'   => 3
+        'failed'   => 3,
     ];
+
+    protected $prefix = Config::VAR_PREFIX;
 
     protected $casts = [
         'id'           => 'int',

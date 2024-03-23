@@ -34,7 +34,7 @@ export async function importMachine({ data }: { data: EventDataType }) {
   const setAtomValue: Setter = store.set
 
   const machine = await import(`../globalStates/flows/machines/${appSlug}/_${appSlug}Machines.ts`).catch(
-    () => false
+    err => console.error('cannot import machine', err)
   )
 
   if (!machine) return

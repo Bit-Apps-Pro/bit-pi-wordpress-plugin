@@ -22,9 +22,7 @@ export default function Tool({ title, appConfig }: ToolPropsTypes) {
         }}
       >
         <FlowBuilderDraggableItem appConfig={appConfig} css={{ cursor: 'grab' }}>
-          <div className={css.tool}>
-            <img className={css.toolIcon} src={appConfig.iconURL} alt="iconURL" />
-          </div>
+          <div className={css.tool}>{appConfig.icon}</div>
         </FlowBuilderDraggableItem>
       </div>
       <p className={css.toolTitle}>{title}</p>

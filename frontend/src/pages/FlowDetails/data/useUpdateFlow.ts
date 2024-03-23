@@ -1,13 +1,9 @@
 import request from '@common/helpers/request'
 import { useMutation } from '@tanstack/react-query'
 
-export interface NewTagType {
-  title: string
-  slug: string
-}
 interface FlowType {
   tag?: {
-    newTags: NewTagType[]
+    newTags: string[]
     oldTags: string
   }
   flow?: {

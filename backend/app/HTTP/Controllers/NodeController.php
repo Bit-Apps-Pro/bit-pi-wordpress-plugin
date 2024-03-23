@@ -2,11 +2,9 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
-use BitApps\Pi\Config;
 use BitApps\Pi\HTTP\Requests\NodeStoreRequest;
 use BitApps\Pi\Model\Connection;
 use BitApps\Pi\Model\FlowNode;
-use BitApps\Pi\Model\Webhook;
 use BitApps\WPKit\Http\Request\Request;
 use BitApps\WPKit\Http\Response;
 
@@ -109,9 +107,10 @@ final class NodeController
             // remove variables
             $validated['variables'] = null;
 
-            // remove flow_id specific webhook
-            $table = Config::get('WP_DB_PREFIX') . Config::VAR_PREFIX . 'webhooks';
-            Webhook::raw('UPDATE ' . $table . ' SET flow_id = null WHERE flow_id = %d', $validated['flow_id']);
+            // remove flow_id from webhook table if first node
+            if (explode('-', $validated['node_id'])[1] === '1') {
+                (new WebhookController())->removeWebhookByFlowId($validated['flow_id']);
+            }
         }
 
         return $validated;

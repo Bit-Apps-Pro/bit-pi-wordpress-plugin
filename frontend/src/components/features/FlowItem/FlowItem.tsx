@@ -9,8 +9,8 @@ import { getAppBySlug } from '@features/FlowBuilder/helpers/FlowBuilderHelper'
 import LucideIcn from '@icons/LucideIcn'
 import Wire from '@icons/Wire'
 import useDeleteFlow from '@pages/FlowDetails/data/useDeleteFlow'
-import useUpdateFlow, { type NewTagType } from '@pages/FlowDetails/data/useUpdateFlow'
-import useFetchTags from '@pages/Flows/shared/FlowTags/data/useFetchTags'
+import useUpdateFlow from '@pages/FlowDetails/data/useUpdateFlow'
+import useTags from '@pages/Flows/shared/FlowTags/data/useTags'
 import { type TagType } from '@pages/Flows/shared/FlowTags/ui/FlowTagType'
 import Input from '@utilities/Input'
 import Select from '@utilities/Select'
@@ -49,11 +49,12 @@ export default function FlowItem({
   const [flowTitle, setFlowTitle] = useState(title)
   const setFlows = useSetAtom($flows)
   const [activeModal, setActiveModal] = useState({ isActive: false, layoutId: '' })
-  const { fetchedTags, refetchTag } = useFetchTags()
+  const { tags, refetchTag } = useTags()
   const { token } = useTheme()
+  const [errors, setErrors] = useState<string>('')
 
   const flowTags = tagId
-    ? fetchedTags.filter((tag: TagType) =>
+    ? tags.filter((tag: TagType) =>
         tagId
           .split(',')
           .map(item => Number(item))
@@ -70,7 +71,7 @@ export default function FlowItem({
   }, [title])
 
   useEffect(() => {
-    if (updateFlowData) {
+    if (updateFlowData && 'flowDetails' in updateFlowData) {
       setFlows((prevFlow: FlowItemType[]) =>
         create(prevFlow, (draftFlow: FlowItemType[]) => {
           draftFlow.forEach((flowDetails: FlowItemType) => {
@@ -89,7 +90,10 @@ export default function FlowItem({
     }
   }, [updateFlowData])
 
-  const closeModal = () => setActiveModal({ isActive: false, layoutId: '' })
+  const closeModal = () => {
+    setActiveModal({ isActive: false, layoutId: '' })
+    setErrors('')
+  }
 
   const deleteFlow = (flowId: number) => () => {
     deleteFlowMutate({ id: flowId })
@@ -109,26 +113,25 @@ export default function FlowItem({
   }
 
   const editFlowHandler = (flowId: number) => async () => {
-    const findNewTags = selectedTag.filter(
-      (tag: string) => !fetchedTags.find(value => value.title === tag)
-    )
-    const findOldTags = fetchedTags.filter((tag: TagType) => selectedTag.includes(tag.title))
-
-    const newTags = findNewTags.reduce((concatTags: NewTagType[], tag: string) => {
-      concatTags.push({ title: tag, slug: tag.toLowerCase().replace(/\s/g, '-') })
-      return concatTags
-    }, [])
+    const newTags = selectedTag.filter((tag: string) => !tags.find(value => value.title === tag))
+    const findOldTags = tags.filter((tag: TagType) => selectedTag.includes(tag.title))
 
     const concatTagIds = findOldTags.reduce(
       (concatIds: string, tag: TagType) => `${concatIds},${tag.id}`,
       ''
     )
 
-    await updateFlow({
+    const { data, status } = await updateFlow({
       tag: { newTags, oldTags: concatTagIds.slice(1) },
       flow: { title: flowTitle },
       id: flowId
     })
+
+    if (status === 'error') {
+      setErrors(data.flat().join(', '))
+      return
+    }
+
     closeModal()
   }
 
@@ -149,7 +152,7 @@ export default function FlowItem({
     })
   }
 
-  const tagOptions: DefaultOptionType[] = fetchedTags.map((tag: TagType) => ({
+  const tagOptions: DefaultOptionType[] = tags.map((tag: TagType) => ({
     value: tag.title,
     label: tag.title
   }))
@@ -218,7 +221,7 @@ export default function FlowItem({
                   shape="circle"
                   onClick={(e: MouseEvent) => e.preventDefault()}
                   type="text"
-                  icon={<LucideIcn name="more-vertical" />}
+                  icon={<LucideIcn name="ellipsis-vertical" />}
                 />
               </Dropdown>
               <Switch
@@ -265,6 +268,8 @@ export default function FlowItem({
           onChange={handleChangeTag}
           value={selectedTag}
           options={tagOptions}
+          status={errors && 'error'}
+          invalidMessage={errors}
         />
       </Modal>
     </>

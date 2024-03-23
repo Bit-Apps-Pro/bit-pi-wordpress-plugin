@@ -3,7 +3,7 @@
  * Plugin Name:  Bit Pi
  * Plugin URI:   https://bitapps.pro/bit-pi
  * Description:  Integrates with other platform
- * Version:      0.1.0
+ * Version:      1.0.0
  * Author:       Bit Apps
  * Author URI:   https://bitapps.pro
  * Text Domain:  bit-pi

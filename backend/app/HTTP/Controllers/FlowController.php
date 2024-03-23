@@ -132,6 +132,9 @@ final class FlowController
         if ($tag && \count($tag['newTags']) > 0) {
             $flowService = new FlowService();
             $getInsertedNewTag = $flowService->insertNewTag($tag);
+            if (\array_key_exists('validation', $getInsertedNewTag) && $getInsertedNewTag['validation'] === false) {
+                return Response::error($getInsertedNewTag['errors']);
+            }
             $prepareFlowTagId = ltrim($prepareFlowTagId . ',' . $getInsertedNewTag['tag_ids'], ',');
             $editedFlowField['tag_id'] = $prepareFlowTagId;
 
@@ -146,7 +149,7 @@ final class FlowController
             return ['flowDetails' => $getFlow, 'insertedNewTags' => $getInsertedLastTags];
         }
 
-        return ['flowDetails' => $getFlow];
+        return Response::success($getFlow);
     }
 
     public function destroy(Request $request)
@@ -154,7 +157,7 @@ final class FlowController
         $getFlow = new Flow($request->id);
         $getFlow->delete();
 
-        return $getFlow;
+        return Response::success('Flow deleted successfully');
     }
 
     /**

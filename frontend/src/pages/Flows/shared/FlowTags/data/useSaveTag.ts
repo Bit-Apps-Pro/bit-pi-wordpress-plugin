@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 export default function useSaveTag() {
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['save_tags'],
-    mutationFn: async (tagData: Pick<TagType, 'title'>) => request<TagType>('tags/save', tagData)
+    mutationFn: async (title: TagType['title']) => request<TagType>('tags/save', { title })
   })
 
   return {

@@ -24,12 +24,6 @@
   bottom: calc(100% + 5px);
   left: 50%;
   transform: translateX(-50%);
-  display: none;
-}
-
-:global(.selected) .router ~ .actions,
-.router:focus-within ~ .actions {
-  display: block;
 }
 
 .router .addBtn {

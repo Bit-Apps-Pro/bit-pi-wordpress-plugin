@@ -18,7 +18,7 @@ export default function FlowHistories() {
 
   return (
     <>
-      <Button onClick={handleOpen} className="mr-2" icon={<LucideIcn name="alert-circle" />}>
+      <Button onClick={handleOpen} className="mr-2" icon={<LucideIcn name="circle-alert" />}>
         Logs
       </Button>
 

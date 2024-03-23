@@ -19,6 +19,8 @@ use BitApps\WPKit\Hooks\Hooks;
 use BitApps\WPKit\Http\RequestType;
 use BitApps\WPKit\Migration\MigrationHelper;
 use BitApps\WPKit\Utils\Capabilities;
+use BitApps\WPTelemetry\Telemetry\Telemetry;
+use BitApps\WPTelemetry\Telemetry\TelemetryConfig;
 
 final class Plugin
 {
@@ -38,11 +40,13 @@ final class Plugin
      */
     public function __construct()
     {
-        Connection::setPluginPrefix(Config::VAR_PREFIX);
+        // Connection::setPluginPrefix(Config::VAR_PREFIX);
 
         $this->registerInstaller();
 
         Hooks::addAction('plugins_loaded', [$this, 'loaded']);
+
+        $this->initWPTelemetry();
     }
 
     public function registerInstaller()
@@ -57,9 +61,23 @@ final class Plugin
     public function loaded()
     {
         Hooks::doAction(Config::withPrefix('loaded'));
+
         Hooks::addAction('init', [$this, 'registerProviders'], 11);
+
         Hooks::addFilter('plugin_action_links_' . Config::get('BASENAME'), [$this, 'actionLinks']);
+
         $this->maybeMigrateDB();
+    }
+
+    public function initWPTelemetry()
+    {
+        TelemetryConfig::setSlug(Config::SLUG);
+        TelemetryConfig::setTitle(Config::TITLE);
+        TelemetryConfig::setVersion(Config::VERSION);
+        TelemetryConfig::setPrefix(Config::VAR_PREFIX);
+
+        Telemetry::report()->init();
+        Telemetry::feedback()->init();
     }
 
     public function middlewares()

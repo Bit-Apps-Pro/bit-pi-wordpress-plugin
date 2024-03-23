@@ -2,6 +2,7 @@
 
 namespace BitApps\Pi\Model;
 
+use BitApps\Pi\Config;
 use BitApps\WPDatabase\Model;
 
 /**
@@ -15,6 +16,8 @@ class FlowHistory extends Model
         'FAILED'          => 'failed',
         'PARTIAL_SUCCESS' => 'partial-success'
     ];
+
+    protected $prefix = Config::VAR_PREFIX;
 
     protected $table = 'flow_histories';
 

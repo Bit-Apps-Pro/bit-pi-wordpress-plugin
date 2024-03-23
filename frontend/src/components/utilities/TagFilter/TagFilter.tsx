@@ -149,7 +149,7 @@ export default function TagFilter({
         open={isTagsOpen}
         dropdownRender={TagListMenu({ handleOnAdd, token, isAddable: !!onAdd })}
       >
-        <Button shape="circle" icon={<LucideIcn name="more-vertical" />} aria-label="more-tags" />
+        <Button shape="circle" icon={<LucideIcn name="ellipsis-vertical" />} aria-label="more-tags" />
       </Dropdown>
     </Space>
   )

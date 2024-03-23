@@ -6,8 +6,11 @@ use BitApps\Pi\Config;
 use BitApps\Pi\Model\Flow;
 use BitApps\Pi\Model\FlowNode;
 use BitApps\Pi\Model\Tag;
+use BitApps\Pi\Rules\UniqueRule;
 use BitApps\WPKit\Helpers\Arr;
 use BitApps\WPKit\Helpers\JSON;
+use BitApps\WPKit\Helpers\Slug;
+use BitApps\WPValidator\Validator;
 
 class FlowService
 {
@@ -31,10 +34,30 @@ class FlowService
 
     public function insertNewTag($tagData)
     {
-        $newTags = $tagData['newTags'];
-        $prepareFlowTagId = '';
+        $validator = new Validator();
+
+        $validator->make($tagData['newTags'], [
+            '*' => ['sanitize:text', 'required', new UniqueRule(Tag::class, 'title', 'Tag: :value  can\'t be duplicate')]
+        ]);
+
+        $errors = $validator->errors();
+
+        if (!empty($errors)) {
+            return ['validation' => false, 'errors' => $errors];
+        }
+
+        $validated = $validator->validated();
+        $newTags = [];
+
+        foreach ($validated as $item) {
+            $newTags[] = [
+                'title' => $item,
+                'slug'  => Slug::generate($item)
+            ];
+        }
 
         $getLastInsertedTags = Tag::insert($newTags);
+        $prepareFlowTagId = '';
 
         foreach ($getLastInsertedTags as $tagId) {
             $prepareFlowTagId .= $tagId['id'] . ',';

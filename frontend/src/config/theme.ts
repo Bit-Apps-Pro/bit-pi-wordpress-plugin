@@ -36,7 +36,7 @@ export const darkThemeConfig = {
   borderRadiusSM: 8,
   borderRadiusXS: 4,
   colorPrimary: '#006FEE',
-  colorInfo: '#000000',
+  colorInfo: '#ffffff',
   colorSuccess: '#00ff87',
   colorError: '#ff6264',
   colorPrimaryHover: '#003fde',

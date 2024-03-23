@@ -2,7 +2,6 @@ import config from '@config/config'
 import LogoIcn from '@icons/LogoIcn'
 import LogoText from '@icons/LogoText'
 import LucideIcn from '@icons/LucideIcn'
-import { ddd } from '@pro/test2'
 import ut from '@resource/utilsCssInJs'
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, Card, Checkbox, Col, Flex, Row, Skeleton, Space, Spin, Typography, theme } from 'antd'
@@ -52,8 +51,6 @@ export default function Support() {
           <LogoText h={25} />
         </Space>
       </div>
-
-      {ddd()}
 
       <Row>
         <Col md={13} sm={24}>

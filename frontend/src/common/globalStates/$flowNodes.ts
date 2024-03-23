@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react'
+
 import request from '@common/helpers/request'
 import { type ConditionTypes } from '@features/FlowBuilder/internals/ConditionItem/ConditionalType'
 import { nodeData } from '@features/NodeDetailsModal/data/useSaveNode'
@@ -21,7 +23,7 @@ export interface VariableType {
 }
 export interface FlowNodeType extends Partial<FlowMachineType> {
   appTitle?: string
-  appIcon?: string
+  appIcon?: ReactNode
   appColor?: string
   machineLabel?: string
   variables?: VariableType[]

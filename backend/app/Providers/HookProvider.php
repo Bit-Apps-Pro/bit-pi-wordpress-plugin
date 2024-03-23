@@ -20,16 +20,17 @@ class HookProvider
         $this->loadTriggersAjax();
         $this->loadAppHooks();
         $this->loadActionsHooks();
+
         Hooks::addAction('rest_api_init', [$this, 'loadApi']);
         Hooks::addAction(Config::VAR_PREFIX . 'execute_delayed_flow', [Delay::class, 'executeDelayedFlow'], 10, 2);
-        Hooks::addFilter('safe_style_css', [$this, 'allowDisplayStyleAttribute']);
+        Hooks::addFilter('safe_style_css', [$this, 'allowStyleProperties']);
 
         if (isset($_ENV['CLI_ACTIVE']) && $_ENV['CLI_ACTIVE']) {
-            include_once __DIR__ . './../../../cli/Register.php';
+            include_once __DIR__ . './../../../cli/RegisterCommands.php';
         }
     }
 
-    public function allowDisplayStyleAttribute($styles)
+    public function allowStyleProperties($styles)
     {
         $styles[] = 'display';
 

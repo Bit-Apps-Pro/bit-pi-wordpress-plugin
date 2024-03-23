@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import AppActionsList from '@features/NodeDetailsModal/internals/AppActionsList'
 import AppList from '@features/NodeDetailsModal/internals/AppsList'
@@ -12,7 +12,7 @@ import appHeaderStyle from './AppHeader.style'
 type AppHeaderType = {
   appName?: string
   actionName?: string
-  appIcon?: string
+  appIcon?: ReactNode
   appColor?: string
 }
 
@@ -23,7 +23,7 @@ export default function AppHeader({ appName, actionName, appIcon, appColor }: Ap
 
   return (
     <Space className="mb-2">
-      {appIcon ? (
+      {appIcon && typeof appIcon === 'string' ? (
         <img
           src={appIcon}
           alt={appName}

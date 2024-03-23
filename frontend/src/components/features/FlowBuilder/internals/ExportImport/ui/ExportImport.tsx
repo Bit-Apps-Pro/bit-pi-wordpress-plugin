@@ -95,7 +95,7 @@ export default function ExportImport() {
         className="mr-2"
         arrow
       >
-        <Button icon={<LucideIcn name="more-vertical" />} />
+        <Button icon={<LucideIcn name="ellipsis-vertical" />} />
       </Dropdown>
 
       <Modal title="Import Flow" open={isModalOpen} onOk={handleOk} onCancel={closeModal}>

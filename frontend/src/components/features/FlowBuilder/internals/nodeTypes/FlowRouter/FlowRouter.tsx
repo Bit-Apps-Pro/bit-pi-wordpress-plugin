@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { type Connection, Handle, type NodeProps, Position, useEdges, useNodes } from 'reactflow'
 
 import { edgeConnectionValidation } from '@components/features/FlowBuilder/helpers/FlowBuilderHelper'
@@ -20,13 +20,35 @@ function FlowRouter({ id, type, isConnectable, deleteNode }: NodePropsType) {
   const { handleAddNode } = useAddNode(id, 180)
   const edges = useEdges()
   const nodes = useNodes()
+  const [showActions, setShowActions] = useState(false)
+  let timer: string | number | NodeJS.Timeout | undefined
 
   const isValidConnection = (currentHandle: string) => (connection: Connection) =>
     edgeConnectionValidation(connection, edges, nodes, type, currentHandle)
 
+  const handleRouterHover = (isHovered: boolean) => () => {
+    if (isHovered) {
+      setShowActions(true)
+    } else {
+      timer = setTimeout(() => {
+        setShowActions(false)
+      }, 100)
+    }
+  }
+
+  const handleRouterHoverCancel = () => {
+    clearTimeout(timer)
+  }
+
   return (
     <>
-      <div className={`${cls.nodeWrp}`} data-testid="flow-node" data-node-id={id}>
+      <div
+        className={`${cls.nodeWrp}`}
+        data-testid="flow-node"
+        data-node-id={id}
+        onMouseEnter={handleRouterHover(true)}
+        onMouseLeave={handleRouterHover(false)}
+      >
         <div className={`${css.router}`}>
           <Button
             type="text"
@@ -36,18 +58,24 @@ function FlowRouter({ id, type, isConnectable, deleteNode }: NodePropsType) {
           />
           <RouterIcn className={css.routerIcon} />
         </div>
-        <div className={css.actions} css={{ backgroundColor: token.colorBgContainer, borderRadius: 50 }}>
-          <Popconfirm
-            onConfirm={() => deleteNode(id)}
-            okText="Yes"
-            cancelText="No"
-            title="Delete the router"
-            description="Are you sure to delete this router?"
-            icon={<LucideIcn name="trash-2" color="red" />}
+        {showActions && (
+          <div
+            className={css.actions}
+            css={{ backgroundColor: token.colorBgContainer, borderRadius: 50 }}
+            onMouseEnter={handleRouterHoverCancel}
           >
-            <Button type="text" shape="circle" icon={<LucideIcn name="trash-2" />} />
-          </Popconfirm>
-        </div>
+            <Popconfirm
+              onConfirm={() => deleteNode(id)}
+              okText="Yes"
+              cancelText="No"
+              title="Delete the router"
+              description="Are you sure to delete this router?"
+              icon={<LucideIcn name="trash-2" color="red" />}
+            >
+              <Button type="text" shape="circle" icon={<LucideIcn name="trash-2" />} />
+            </Popconfirm>
+          </div>
+        )}
       </div>
 
       <Handle

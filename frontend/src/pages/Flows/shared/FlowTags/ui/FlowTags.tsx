@@ -2,8 +2,8 @@ import { useId, useRef, useState } from 'react'
 
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import useDeleteTag from '@pages/Flows/shared/FlowTags/data/useDeleteTag'
-import useFetchTags from '@pages/Flows/shared/FlowTags/data/useFetchTags'
 import useSaveTag from '@pages/Flows/shared/FlowTags/data/useSaveTag'
+import useTags from '@pages/Flows/shared/FlowTags/data/useTags'
 import useUpdateTag from '@pages/Flows/shared/FlowTags/data/useUpdateTag'
 import useUpdateTagStatus from '@pages/Flows/shared/FlowTags/data/useUpdateTagStatus'
 import Input from '@utilities/Input'
@@ -14,19 +14,21 @@ import { create } from 'mutative'
 import { type TagType, type TagsPropsType } from './FlowTagType'
 
 export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
-  const { fetchedTags, refetchTag } = useFetchTags()
+  const { tags, refetchTag } = useTags()
   const { saveTag, isSavingTag } = useSaveTag()
   const { updateTag, isUpdatingTag } = useUpdateTag()
   const { updateTagStatus } = useUpdateTagStatus()
   const { deleteTag } = useDeleteTag()
+
   const [tagModalActive, setTagModalActive] = useState<boolean>(false)
   const [editTagModalActive, setEditTagModalActive] = useState<boolean>(false)
   const [tagName, setTagName] = useState('')
   const [error, setError] = useState<Record<string, string[]>>()
+
   const [modal, contextHolder] = Modal.useModal()
   const selectedTag = useRef<number>()
 
-  const selectTag = (tagId: number) => {
+  const selectTag = (tagId: TagType['id']) => {
     setActiveTag(prev =>
       create(prev, draft => {
         if (tagId === 0) return []
@@ -41,7 +43,7 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
   }
 
   const saveTagHandler = async () => {
-    const { data, status } = await saveTag({ title: tagName })
+    const { data, status } = await saveTag(tagName)
     if (status === 'error') {
       setError(data as unknown as Record<string, string[]>)
       return
@@ -55,16 +57,14 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
 
   const deleteTagHandler = async () => {
     if (selectedTag.current) {
-      await deleteTag({ id: selectedTag.current })
+      await deleteTag(selectedTag.current)
       refetchTag()
     }
   }
 
-  const deleteConfirmation = (tagId: number) => {
-    const removeTag = fetchedTags.find((tag: TagType) => tag.id === tagId)
-    if (!removeTag) return
-
+  const deleteConfirmation = (tagId: TagType['id']) => {
     selectedTag.current = tagId
+
     modal.confirm({
       title: 'Are you Confirm to Delete?',
       content: "If you delete you can't recover it",
@@ -74,8 +74,8 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
     })
   }
 
-  const editTagModalOpen = (tagId: number) => {
-    const editTag = fetchedTags.find((tag: TagType) => tag.id === tagId)
+  const editTagModalOpen = (tagId: TagType['id']) => {
+    const editTag = tags.find(tag => tag.id === tagId)
     if (!editTag) return
 
     selectedTag.current = tagId
@@ -83,9 +83,10 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
     setEditTagModalActive(true)
   }
 
-  const pinTag = async (tagId: number) => {
-    const pinnedTag = fetchedTags.find((tag: TagType) => tag.id === tagId)
+  const pinTag = async (tagId: TagType['id']) => {
+    const pinnedTag = tags.find(tag => tag.id === tagId)
     if (!pinnedTag) return
+
     await updateTagStatus({ id: tagId, status: !Number(pinnedTag.status) })
     refetchTag()
   }
@@ -95,8 +96,9 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
     setTagModalActive(true)
   }
 
-  const updateTagHandler = (tagId: number) => async () => {
+  const updateTagHandler = (tagId: TagType['id']) => async () => {
     const { data, status } = await updateTag({ id: tagId, title: tagName })
+
     if (status === 'error') {
       setError(data as unknown as Record<string, string[]>)
       return
@@ -108,13 +110,12 @@ export default function FlowTags({ activeTag, setActiveTag }: TagsPropsType) {
     setError(undefined)
   }
 
-  const tagsList =
-    fetchedTags.map((tag: TagType) => ({
-      id: tag.id,
-      label: tag.title || '',
-      pinned: Boolean(Number(tag.status)) || false,
-      active: activeTag.includes(tag.id)
-    })) || []
+  const tagsList = tags.map(tag => ({
+    id: tag.id,
+    label: tag.title,
+    pinned: Boolean(Number(tag.status)),
+    active: activeTag.includes(tag.id)
+  }))
 
   return (
     <>

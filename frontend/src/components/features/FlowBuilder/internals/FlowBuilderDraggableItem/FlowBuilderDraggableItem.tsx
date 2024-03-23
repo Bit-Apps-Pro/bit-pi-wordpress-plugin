@@ -27,6 +27,8 @@ interface FlowBuilderDraggableItemPropsTypes {
   onDragStop?: (e: DraggableEvent, draggableData: DraggableData) => void
 }
 
+const hasIconURLProperty = (appConfig: AppConfig): appConfig is AppType => appConfig.type === 'node'
+
 const defaultData = (appConfig: AppConfig, nodeId: string) => {
   switch (appConfig.type) {
     case NodeTypeDef.condition:
@@ -64,7 +66,7 @@ const defaultData = (appConfig: AppConfig, nodeId: string) => {
         nodeId,
         appSlug: appConfig.slug,
         appTitle: appConfig.title,
-        appIcon: appConfig.iconURL,
+        appIcon: hasIconURLProperty(appConfig) ? appConfig.iconURL : appConfig.icon,
         appColor: appConfig.color
       }
   }

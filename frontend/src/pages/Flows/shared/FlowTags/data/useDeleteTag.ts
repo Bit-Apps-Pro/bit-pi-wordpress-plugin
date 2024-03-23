@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 export default function useDeleteTag() {
   const { mutateAsync } = useMutation({
     mutationKey: ['delete_tags'],
-    mutationFn: async (tagData: Pick<TagType, 'id'>) => request('tags/delete', tagData)
+    mutationFn: async (tagId: TagType['id']) => request('tags/delete', { tagId })
   })
 
   return {

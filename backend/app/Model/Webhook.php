@@ -2,6 +2,7 @@
 
 namespace BitApps\Pi\Model;
 
+use BitApps\Pi\Config;
 use BitApps\WPDatabase\Model;
 
 /**
@@ -9,6 +10,8 @@ use BitApps\WPDatabase\Model;
  */
 class Webhook extends Model
 {
+    protected $prefix = Config::VAR_PREFIX;
+
     protected $casts = [
         'id' => 'int'
     ];

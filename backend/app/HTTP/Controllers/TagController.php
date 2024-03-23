@@ -3,70 +3,70 @@
 namespace BitApps\Pi\HTTP\Controllers;
 
 use BitApps\Pi\Model\Tag;
+use BitApps\Pi\Rules\UniqueRule;
 use BitApps\WPKit\Helpers\Slug;
 use BitApps\WPKit\Http\Request\Request;
-use WP_Error;
+use BitApps\WPKit\Http\Response;
 
 final class TagController
 {
     public function index()
     {
-        return Tag::all();
+        return Tag::get(['id', 'title', 'status']);
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => ['required', 'sanitize:text'],
+        $validated = $request->validate([
+            'title' => ['required', 'sanitize:text', new UniqueRule(Tag::class, 'title')],
         ]);
 
-        $validatedData['slug'] = Slug::generate($validatedData['title']);
+        $validated['slug'] = Slug::generate($validated['title']);
 
-        $tag = new Tag($validatedData);
-        $status = $tag->save();
+        $tag = Tag::insert($validated);
 
-        if (!$status) {
-            return new WP_Error('Tag save fail', $validatedData);
+        if (!$tag) {
+            return Response::error('Failed to save tag');
         }
 
-        return $tag;
+        return Response::success($tag);
     }
 
     public function destroy(Request $request)
     {
-        $getFlow = new Tag($request->id);
+        $getFlow = new Tag($request->tagId);
         $getFlow->delete();
 
-        return $getFlow;
+        return Response::success('Tag deleted successfully');
     }
 
     public function update(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'id'    => ['required', 'integer'],
-            'title' => ['required', 'sanitize:text'],
+            'title' => ['required', 'sanitize:text', (new UniqueRule(Tag::class, 'title'))->ignore($request->id)],
         ]);
 
-        $validatedData['slug'] = Slug::generate($validatedData['title']);
+        $validated['slug'] = Slug::generate($validated['title']);
 
         $getFlow = Tag::findOne(['id' => $request->id]);
-        $getFlow->update($validatedData);
+        $getFlow->update($validated);
         $getFlow->save();
 
-        return $getFlow;
+        return Response::success($getFlow);
     }
 
     public function updateStatus(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'id'     => ['required', 'integer'],
             'status' => ['required', 'boolean']
         ]);
 
         $getFlow = Tag::findOne(['id' => $request->id]);
-        $getFlow->update($validatedData);
+        $getFlow->update($validated);
         $getFlow->save();
 
-        return $getFlow;
+        return Response::success('Tag status updated successfully');
     }
 }
