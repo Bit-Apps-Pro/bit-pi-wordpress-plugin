@@ -93,3 +93,12 @@ Data is sent only when a site admin configures and runs the related trigger/acti
 - **Terms**: https://www.whatsapp.com/legal/business-terms/
 - **Privacy policy**: https://www.whatsapp.com/legal/privacy-policy/
 
+## Telemetry (Optional)
+
+### WP-Telemetry
+- **Service used for**: Collects basic, anonymous usage data (e.g., active features, WordPress/PHP version) to help improve the plugin.
+- **What data is sent**: Non-personally-identifiable site and plugin usage statistics.
+- **Endpoint/domain**: https://wp-api.bitapps.pro/public/
+- **When data is sent**: Only after explicit consent is given by the site administrator.
+- **Opt-out**: You may opt out at any time from the plugin settings.
+- **Privacy Policy:** :https://bitapps.pro/privacy-policy/
