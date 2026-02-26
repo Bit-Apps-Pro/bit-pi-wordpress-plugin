@@ -2,12 +2,15 @@
 
 namespace BitApps\Pi\Model;
 
-use BitApps\Pi\Config;
-use BitApps\WPDatabase\Model;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-/**
- * Undocumented class.
- */
+
+use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Model;
+
 class FlowNode extends Model
 {
     protected $prefix = Config::VAR_PREFIX;
@@ -26,7 +29,6 @@ class FlowNode extends Model
         'flow_id',
         'app_slug',
         'machine_slug',
-        'machine_label',
         'field_mapping',
         'data',
         'variables',

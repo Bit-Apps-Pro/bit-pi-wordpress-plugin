@@ -2,12 +2,15 @@
 
 namespace BitApps\Pi\Model;
 
-use BitApps\Pi\Config;
-use BitApps\WPDatabase\Model;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-/**
- * Undocumented class.
- */
+
+use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Model;
+
 class Connection extends Model
 {
     public const STATUS = [

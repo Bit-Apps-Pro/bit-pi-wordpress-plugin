@@ -2,7 +2,7 @@
 
 namespace BitApps\Pi\Helpers;
 
-if (!\defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -11,10 +11,10 @@ class Parser
     /**
      * Parses a response array into a structured format.
      *
-     * @param array $response The response array to parse.
-     * @param bool  $isFile   Whether the response contains file data.
+     * @param array $response the response array to parse
+     * @param bool  $isFile   whether the response contains file data
      *
-     * @return array The parsed response.
+     * @return array the parsed response
      */
     public static function parseResponse($response, $isFile = false)
     {
@@ -22,11 +22,11 @@ class Parser
 
         foreach ($response as $key => $value) {
             if (\is_array($value) || \is_object($value)) {
-                if (static::isMultiDimensionArray($value)) {
+                if (Utility::isMultiDimensionArray($value) || Utility::isSequentialArray($value)) {
                     $parsed[] = [
                         'key'   => $key,
                         'type'  => 'array',
-                        'value' => static::parseResponse($value[0] ?? $value, $isFile),
+                        'value' => static::parseResponse($value, $isFile)
                     ];
                 } else {
                     $parsed[] = [
@@ -35,20 +35,18 @@ class Parser
                         'value' => static::parseResponse($value, $isFile),
                     ];
                 }
+            } elseif ($isFile && $key === 'tmp_name') {
+                $parsed[] = [
+                    'key'   => $key,
+                    'type'  => 'buffer',
+                    'value' => file_get_contents($value),
+                ];
             } else {
-                if ($isFile && $key === 'tmp_name') {
-                    $parsed[] = [
-                        'key'   => $key,
-                        'type'  => 'buffer',
-                        'value' => file_get_contents($value),
-                    ];
-                } else {
-                    $parsed[] = [
-                        'key'   => $key,
-                        'type'  => \gettype($value),
-                        'value' => $value,
-                    ];
-                }
+                $parsed[] = [
+                    'key'   => $key,
+                    'type'  => \gettype($value),
+                    'value' => $value,
+                ];
             }
         }
 
@@ -70,6 +68,7 @@ class Parser
 
         foreach ($parseResponse as $response) {
             $response = (array) $response;
+
             if (\in_array($response['type'], ['array', 'collection'])) {
                 $arrayStructure[$response['key']] = static::parseArrayStructure($response['value']);
             } else {
@@ -78,21 +77,5 @@ class Parser
         }
 
         return $arrayStructure;
-    }
-
-    /**
-     * Checks if the given array is a multi-dimensional array.
-     *
-     * @param array $data
-     *
-     * @return bool Whether the array is a multi-dimensional array.
-     */
-    private static function isMultiDimensionArray($data)
-    {
-        if (!\is_array($data)) {
-            return false;
-        }
-
-        return !(\count($data) === \count($data, COUNT_RECURSIVE));
     }
 }

@@ -2,7 +2,13 @@
 
 namespace BitApps\Pi\Rules;
 
-use BitApps\WPValidator\Rule;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPValidator\Rule;
 
 class UniqueRule extends Rule
 {
@@ -18,6 +24,7 @@ class UniqueRule extends Rule
     {
         $this->model = $model;
         $this->column = $column;
+
         if ($customMessage) {
             $this->message = $customMessage;
         }

@@ -2,7 +2,13 @@
 
 namespace BitApps\Pi\HTTP\Requests;
 
-use BitApps\WPKit\Http\Request\Request;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
 
 class FlowStoreRequest extends Request
 {
@@ -12,7 +18,8 @@ class FlowStoreRequest extends Request
             'title'  => ['required', 'string', 'sanitize:text'],
             'map'    => ['required', 'array'],
             'data'   => ['required', 'array'],
-            'tag_id' => ['nullable', 'string', 'sanitize:text']
+            'tag_id' => ['nullable', 'string', 'sanitize:text'],
+            'nodes'  => ['nullable', 'array'],
         ];
     }
 }

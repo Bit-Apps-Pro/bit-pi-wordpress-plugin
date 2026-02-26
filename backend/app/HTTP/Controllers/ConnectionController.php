@@ -2,13 +2,19 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPKit\Helpers\JSON;
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\Helpers\Hash;
 use BitApps\Pi\HTTP\Requests\ConnectionIndexRequest;
 use BitApps\Pi\HTTP\Requests\ConnectionStoreRequest;
+use BitApps\Pi\HTTP\Requests\ConnectionUpdateRequest;
 use BitApps\Pi\Model\Connection;
-use BitApps\WPKit\Helpers\JSON;
-use BitApps\WPKit\Http\Request\Request;
-use BitApps\WPKit\Http\Response;
 
 final class ConnectionController
 {
@@ -20,7 +26,7 @@ final class ConnectionController
             $query->where('app_slug', $request['appSlug']);
         }
 
-        $connections = $query->get(['id', 'app_slug', 'auth_type', 'connection_name', 'auth_details']);
+        $connections = $query->desc()->get(['id', 'app_slug', 'auth_type', 'connection_name', 'auth_details', 'created_at']);
 
         return Response::success($connections);
     }
@@ -30,7 +36,6 @@ final class ConnectionController
         $reqData = $request->validated();
 
         $encrypt_keys = $request->get('encrypt_keys', []);
-
         $reqData['encrypt_keys'] = implode(',', $encrypt_keys);
         $authDetails = $reqData['auth_details'];
         $authDetails['generated_at'] = time();
@@ -40,6 +45,7 @@ final class ConnectionController
                 if (empty($authDetails[$value])) {
                     continue;
                 }
+
                 $authDetails[$value] = Hash::encrypt($authDetails[$value]);
             }
         }
@@ -51,13 +57,23 @@ final class ConnectionController
         return Response::success($connection);
     }
 
-    public function update(Request $request, Connection $connection)
+    public function update(ConnectionUpdateRequest $request)
     {
-        $validated = $request->validate([
-            'connection_name' => ['required', 'string', 'sanitize:text'],
-        ]);
+        $validated = $request->validated();
 
-        $connection->update($validated)->save();
+        if (empty(trim($validated['connection_name']))) {
+            return Response::error('Connection name is required');
+        }
+
+        $connection = Connection::findOne(['id' => $validated['connection']]);
+        if (!$connection) {
+            return Response::error('Connection not found');
+        }
+
+        $result = $connection->update($validated)->save();
+        if (!$result) {
+            return Response::error('Failed to update connection');
+        }
 
         return Response::success($connection);
     }

@@ -2,34 +2,39 @@
 
 namespace BitApps\Pi\Model;
 
-use BitApps\Pi\Config;
-use BitApps\WPDatabase\Model;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-/**
- * Undocumented class.
- */
+
+use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Model;
+
 class Flow extends Model
 {
-    public const isHookCaptured = 1;
+    public const IS_HOOK_CAPTURED = 1;
 
-    public const listenerType = [
+    public const LISTENER_TYPE = [
         'NONE'     => 0,
         'CAPTURE'  => 1, // Capture only trigger data
         'RUN_ONCE' => 2  // Flow run once
     ];
 
-    public const status = [
+    public const STATUS = [
         'ACTIVE'    => 1,
         'IN_ACTIVE' => 0
     ];
 
-    public const triggerType = [
-        'WP_HOOK'  => 1,
-        'WEBHOOK'  => 2,
-        'SCHEDULE' => 3
-    ];
+    // public const triggerType = [
+    //     'WP_HOOK'  => 1,
+    //     'webhook'  => 2,
+    //     'SCHEDULE' => 3
+    // ];
 
     public const TOOLS = 'tools';
+
+    public const DEFAULT_SETTINGS = ['onNodeFail' => 'continue'];
 
     protected $prefix = Config::VAR_PREFIX;
 
@@ -37,10 +42,12 @@ class Flow extends Model
         'id'              => 'int',
         'run_count'       => 'int',
         'is_hook_capture' => 'int',
+        'trigger_type'    => 'int',
         'listener_type'   => 'int',
         'is_active'       => 'int',
         'map'             => 'object',
         'data'            => 'object',
+        'settings'        => 'array',
 
     ];
 
@@ -54,7 +61,8 @@ class Flow extends Model
         'tag_id',
         'trigger_type',
         'listener_type',
-        'is_hook_capture'
+        'is_hook_capture',
+        'settings',
     ];
 
     public function logs()

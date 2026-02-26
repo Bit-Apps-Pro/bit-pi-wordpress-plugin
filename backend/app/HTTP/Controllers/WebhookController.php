@@ -2,12 +2,19 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
 use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\HTTP\Requests\WebhookIndexRequest;
 use BitApps\Pi\HTTP\Requests\WebhookRequest;
 use BitApps\Pi\HTTP\Requests\WebhookUpdateRequest;
+use BitApps\Pi\HTTP\Requests\WebhookUpdateTitleRequest;
 use BitApps\Pi\Model\Webhook;
-use BitApps\WPKit\Http\Response;
 
 final class WebhookController
 {
@@ -19,39 +26,42 @@ final class WebhookController
     }
 
     /**
-     * Get all webhooks
+     * Get all webhooks.
      *
      * @return array webhooks
      */
     public function index(WebhookIndexRequest $request)
     {
         $validated = $request->validated();
-        $query = Webhook::select(['id', 'title', 'app_slug', 'webhook_slug']);
+
+        $query = Webhook::select(['id', 'flow_id', 'title', 'app_slug', 'webhook_slug', 'created_at']);
 
         if (isset($validated['flowId'])) {
-            $query->where('flow_id', $validated['flowId'])->orWhere('flow_id', null);
+            $query->where(fn ($q) => $q->where('flow_id', $validated['flowId'])->orWhere('flow_id', null));
         }
+
         if (isset($validated['appSlug'])) {
             $query->where('app_slug', $validated['appSlug']);
         }
 
-        $webhooks = $query->get();
+        $webhooks = $query->desc()->get();
 
         if (\is_array($webhooks)) {
-            array_map(function ($webhook) {
-                $webhook->url = $this->webhookPrefix . $webhook->webhook_slug;
+            array_map(
+                function ($webhook) {
+                    $webhook->url = $this->webhookPrefix . $webhook->webhook_slug;
 
-                return $webhook;
-            }, $webhooks);
+                    return $webhook;
+                },
+                $webhooks
+            );
         }
 
         return Response::success($webhooks);
     }
 
     /**
-     * Store webhook
-     *
-     * @param WebhookRequest $request
+     * Store webhook.
      *
      * @return collection webhook
      */
@@ -77,17 +87,19 @@ final class WebhookController
             return Response::error('Error creating webhook');
         }
 
-        return Response::success([
-            'id'           => $insert->id,
-            'title'        => $insert->title,
-            'app_slug'     => $insert->app_slug,
-            'webhook_slug' => $insert->webhook_slug,
-            'url'          => $this->webhookPrefix . $insert->webhook_slug,
-        ]);
+        return Response::success(
+            [
+                'id'           => $insert->id,
+                'title'        => $insert->title,
+                'app_slug'     => $insert->app_slug,
+                'webhook_slug' => $insert->webhook_slug,
+                'url'          => $this->webhookPrefix . $insert->webhook_slug,
+            ]
+        );
     }
 
     /**
-     * Update webhook
+     * Update webhook.
      *
      * @param Webhook $request
      *
@@ -104,6 +116,28 @@ final class WebhookController
         return Response::success(['id' => $webhook->id]);
     }
 
+    /**
+     * Update webhook title.
+     *
+     * @return Webhook webhook
+     */
+    public function updateTitle(WebhookUpdateTitleRequest $request)
+    {
+        $validated = $request->validated();
+
+        $webhook = Webhook::findOne(['id' => $validated['webhook']]);
+        if (!$webhook->id) {
+            return Response::error('Webhook not found');
+        }
+
+        $result = $webhook->update(['title' => $validated['title']])->save();
+        if (!$result) {
+            return Response::error('Failed to update webhook title');
+        }
+
+        return Response::success($webhook);
+    }
+
     public function removeWebhookByFlowId($flowId)
     {
         // TODO: replace raw query if possible
@@ -112,14 +146,18 @@ final class WebhookController
     }
 
     /**
-     * Destroy webhook
-     *
-     * @param Webhook $request
+     * Destroy webhook.
      *
      * @return int webhook id
      */
     public function destroy(Webhook $webhook)
     {
+        $flowId = $webhook->flow_id;
+
+        if ($flowId) {
+            return Response::error('The Webhook is already connected to ' . $webhook->flow->title);
+        }
+
         $webhook->delete();
 
         return Response::success($webhook->id);

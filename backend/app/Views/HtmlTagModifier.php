@@ -5,7 +5,12 @@
 namespace BitApps\Pi\Views;
 
 use BitApps\Pi\Config;
-use BitApps\WPKit\Hooks\Hooks;
+use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 
 final class HtmlTagModifier
 {
@@ -13,6 +18,7 @@ final class HtmlTagModifier
     {
         Hooks::addFilter('style_loader_tag', [$this, 'updateLinkAttributes'], 0, 2);
         Hooks::addFilter('script_loader_tag', [$this, 'updateScriptAttributes'], 0, 1);
+        Hooks::addFilter('script_loader_src', [$this, 'removeQueryParam'], 99999, 3);
     }
 
     public function updateScriptAttributes($html)
@@ -27,7 +33,7 @@ final class HtmlTagModifier
             '-index-MODULE-js',
         ];
 
-        if (Config::isDev()) {
+        if (Config::getEnv('DEV')) {
             foreach ($keys as $key) {
                 $handle = 'id="' . $slug . $key . '"';
 
@@ -64,14 +70,23 @@ final class HtmlTagModifier
 
         if (strpos($handle, 'CROSSORIGIN') !== false) {
             $id = "id='{$handle}-css'";
-            $html = str_replace($id, $id . ' ' . 'crossorigin', $html);
+            $html = str_replace($id, $id . ' crossorigin', $html);
         }
 
         if (strpos($html, 'SCRIPT') !== false) {
             $id = "id='{$handle}-css'";
-            $html = str_replace($id, $id . ' ' . 'as="script"', $html);
+            $html = str_replace($id, $id . ' as="script"', $html);
         }
 
         return $html;
+    }
+
+    public function removeQueryParam($src, $handle)
+    {
+        if (Config::SLUG . '-index-MODULE' === $handle) {
+            $src = strtok($src, '?');
+        }
+
+        return $src;
     }
 }

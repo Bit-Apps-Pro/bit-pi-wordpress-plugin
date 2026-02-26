@@ -2,9 +2,15 @@
 
 namespace BitApps\Pi\Providers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
 use BitApps\Pi\Config;
-use BitApps\WPKit\Hooks\Hooks;
-use BitApps\WPKit\Installer;
+use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
+use BitApps\Pi\Deps\BitApps\WPKit\Installer;
 
 final class InstallerProvider
 {
@@ -52,9 +58,10 @@ final class InstallerProvider
         $installer->register();
     }
 
-    public function deactivate($networkWide)
+    public function deactivate()
     {
-        // TODO: things to when plugin is deactivate
+        wp_clear_scheduled_hook(Config::VAR_PREFIX . 'flow_history_cleanup');
+        flush_rewrite_rules();
     }
 
     public function registerActivator($networkWide)
@@ -80,8 +87,12 @@ final class InstallerProvider
             'BitAppsPiFlowNodesTableMigration',
             'BitAppsPiTagsTableMigration',
             'BitAppsPiAppConnectionsTableMigration',
+            'BitAppsPiCustomAppsTableMigration',
+            'BitAppsPiCustomMachinesTableMigration',
             'BitAppsPiFlowHistoryTableMigration',
             'BitAppsPiFlowLogsTableMigration',
+            // 'BitAppsPiFlowLogsAddParentNodeIdMigration', TODO:: Add next version
+            'BitAppsPiFlowTagTableMigration',
             'BitAppsPiPluginOptions',
         ];
 
@@ -99,12 +110,16 @@ final class InstallerProvider
     public static function drop()
     {
         $migrations = [
+            'BitAppsPiFlowTagTableMigration',
             'BitAppsPiFlowNodesTableMigration',
             'BitAppsPiFlowLogsTableMigration',
+            // 'BitAppsPiFlowLogsAddParentNodeIdMigration', TODO:: Add next version
             'BitAppsPiFlowHistoryTableMigration',
             'BitAppsPiWebhooksTableMigration',
             'BitAppsPiFlowsTableMigration',
             'BitAppsPiTagsTableMigration',
+            'BitAppsPiCustomMachinesTableMigration',
+            'BitAppsPiCustomAppsTableMigration',
             'BitAppsPiAppConnectionsTableMigration',
             'BitAppsPiPluginOptions',
         ];

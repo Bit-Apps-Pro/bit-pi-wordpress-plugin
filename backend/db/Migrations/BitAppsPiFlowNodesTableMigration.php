@@ -1,16 +1,15 @@
 <?php
 
 use BitApps\Pi\Config;
-use BitApps\WPDatabase\Blueprint;
-use BitApps\WPDatabase\Connection;
-use BitApps\WPDatabase\Schema;
-use BitApps\WPKit\Migration\Migration;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Blueprint;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Connection;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Schema;
+use BitApps\Pi\Deps\BitApps\WPKit\Migration\Migration;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
-
-final class BitAppsPiFlowNodesTableMigration extends Migration
+final class BitAppsPiFlowNodesTableMigration extends Migration // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 {
     public function up(): void
     {
@@ -22,10 +21,9 @@ final class BitAppsPiFlowNodesTableMigration extends Migration
                 $table->string('node_id');
                 $table->string('app_slug')->nullable();
                 $table->string('machine_slug')->nullable();
-                $table->string('machine_label')->nullable();
                 $table->longtext('field_mapping')->nullable();
                 $table->longtext('data')->nullable();
-                $table->mediumtext('variables');
+                $table->mediumtext('variables')->nullable();
                 $table->timestamps();
             }
         );

@@ -1,16 +1,16 @@
 <?php
 
 use BitApps\Pi\Config;
-use BitApps\WPDatabase\Blueprint;
-use BitApps\WPDatabase\Connection;
-use BitApps\WPDatabase\Schema;
-use BitApps\WPKit\Migration\Migration;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Blueprint;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Connection;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Schema;
+use BitApps\Pi\Deps\BitApps\WPKit\Migration\Migration;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-final class BitAppsPiWebhooksTableMigration extends Migration
+final class BitAppsPiWebhooksTableMigration extends Migration // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 {
     public function up(): void
     {

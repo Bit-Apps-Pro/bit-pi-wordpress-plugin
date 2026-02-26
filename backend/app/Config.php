@@ -1,12 +1,13 @@
 <?php
 
-// phpcs:disable Squiz.NamingConventions.ValidVariableName
-
 namespace BitApps\Pi;
 
-use BitApps\Pi\Views\Layout;
+use BitApps\Pi\src\Menu;
+use BitApps\Pi\Views\Body;
+use BitApps\Pi\Views\PluginPageActions;
+use BitApps\PiPro\Config as ProConfig;
 
-if (!\defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -19,13 +20,13 @@ class Config
 
     public const PRO_PLUGIN_SLUG = 'bit-pi-pro';
 
-    public const TITLE = 'Bit Pi';
+    public const TITLE = 'Bit Flows';
 
     public const VAR_PREFIX = 'bit_pi_';
 
-    public const VERSION = '1.0';
+    public const VERSION = '1.16.2';
 
-    public const DB_VERSION = '1.0';
+    public const DB_VERSION = '0.1.0';
 
     public const REQUIRED_PHP_VERSION = '7.4';
 
@@ -37,16 +38,22 @@ class Config
 
     public const CLASS_PREFIX = 'BitAppsPi';
 
+    public const ASSETS_FOLDER = 'assets';
+
+    public const PRO_PLUGIN_NAMESPACE = 'BitApps\PiPro\\';
+
     /**
      * Provides configuration for plugin.
      *
      * @param string $type    Type of conf
      * @param string $default Default value
      *
-     * @return array|string|null
+     * @return null|array|string
      */
     public static function get($type, $default = null)
     {
+        global $wp_rewrite;
+
         switch ($type) {
             case 'MAIN_FILE':
                 return realpath(__DIR__ . DIRECTORY_SEPARATOR . self::APP_BASE);
@@ -54,52 +61,77 @@ class Config
             case 'BASENAME':
                 return plugin_basename(trim(self::get('MAIN_FILE')));
 
+            case 'ROOT_DIR':
+            case 'ROOT_DIR':
+                return plugin_dir_path(self::get('MAIN_FILE'));
+
             case 'BASEDIR':
-                return plugin_dir_path(self::get('MAIN_FILE')) . 'backend';
+                return self::get('ROOT_DIR') . 'backend';
+
+            case 'UPLOAD_BASE_URL':
+                return wp_upload_dir()['baseurl'];
+
+            case 'UPLOAD_BASE_DIR':
+                return wp_upload_dir()['basedir'];
 
             case 'SITE_URL':
-                $parsedUrl = wp_parse_url(get_admin_url());
-                $siteUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-                $siteUrl .= empty($parsedUrl['port']) ? null : ':' . $parsedUrl['port'];
-
-                return $siteUrl;
+                return site_url();
 
             case 'ADMIN_URL':
                 return str_replace(self::get('SITE_URL'), '', get_admin_url());
 
             case 'API_URL':
-                global $wp_rewrite;
-
                 return [
-                    'base'      => get_rest_url() . self::SLUG . '/v1',
+                    'base'      => get_rest_url(null, self::SLUG . '/v1'),
                     'separator' => $wp_rewrite->permalink_structure ? '?' : '&',
                 ];
 
-            case 'DEV_URL':
-                return isset($_ENV['DEV_URL']) ? $_ENV['DEV_URL'] : null;
+            case 'WP_API_URL':
+                return [
+                    'base'      => get_rest_url(),
+                    'separator' => $wp_rewrite->permalink_structure ? '?' : '&',
+                ];
 
             case 'ROOT_URI':
                 return set_url_scheme(plugins_url('', self::get('MAIN_FILE')), wp_parse_url(home_url())['scheme']);
 
             case 'ASSET_URI':
-                return self::get('ROOT_URI') . '/assets';
+                if (self::isProActivated()) {
+                    return ProConfig::get('ASSET_URI');
+                }
 
-            case 'ASSET_JS_URI':
-                return self::get('ASSET_URI') . '/js';
-
-            case 'ASSET_CSS_URI':
-                return self::get('ASSET_URI') . '/css';
+                return self::get('ROOT_URI') . '/' . self::ASSETS_FOLDER;
 
             case 'PLUGIN_PAGE_LINKS':
-                return self::pluginPageLinks();
+                return (new PluginPageActions())->getActionLinks();
 
             case 'SIDE_BAR_MENU':
-                return self::sideBarMenu();
+                return Menu::getSideBarMenu(new Body());
+
+            case 'BUILD_CODE_NAME':
+                if (self::getEnv('DEV')) {
+                    return '';
+                }
+
+                if (self::isProActivated()) {
+                    return file_get_contents(ProConfig::get('ROOT_DIR') . self::ASSETS_FOLDER . '/build-code-name.txt');
+                }
+
+                return file_get_contents(self::get('ROOT_DIR') . self::ASSETS_FOLDER . '/build-code-name.txt');
 
             case 'WP_DB_PREFIX':
                 global $wpdb;
 
                 return $wpdb->prefix;
+
+            case 'REDIRECT_URI':
+                $isPlainPermalink = get_option('permalink_structure') === '';
+
+                if ($isPlainPermalink) {
+                    return self::get('SITE_URL') . '/?pagename=' . self::SLUG . '-oauth-callback';
+                }
+
+                return self::get('SITE_URL') . '/' . Config::SLUG . '/oauth-callback/';
 
             default:
                 return $default;
@@ -173,7 +205,7 @@ class Config
      */
     public static function updateOption($option, $value, $autoload = null)
     {
-        return update_option(self::withPrefix($option), $value, !\is_null($autoload) ? 'yes' : null);
+        return update_option(self::withPrefix($option), $value, \is_null($autoload) ? null : 'yes');
     }
 
     public static function deleteOption($option)
@@ -181,93 +213,22 @@ class Config
         return delete_option(self::withPrefix($option));
     }
 
-    public static function isDev()
+    public static function getEnv($keyName)
     {
-        return isset($_ENV['DEV']) ? $_ENV['DEV'] : false;
+        return isset($_ENV[Config::VAR_PREFIX . $keyName]) ? sanitize_text_field($_ENV[Config::VAR_PREFIX . $keyName]) : false;
     }
 
     /**
-     * Provides links for plugin pages. Those links will bi displayed in
-     * all plugin pages under the plugin name.
+     * Check if pro plugin exist and active.
      *
-     * @return array
+     * @return bool
      */
-    private static function pluginPageLinks()
+    public static function isProActivated()
     {
-        return [
-            'settings' => [
-                'title' => __('Settings', 'bit-pi'),
-                'url'   => self::get('ADMIN_URL') . 'admin.php?page=' . self::SLUG . '#settings',
-            ],
-            'help' => [
-                'title' => __('Help', 'bit-pi'),
-                'url'   => self::get('ADMIN_URL') . 'admin.php?page=' . self::SLUG . '#help',
-            ],
-        ];
-    }
+        if (class_exists(ProConfig::class)) {
+            return ProConfig::isPro();
+        }
 
-    /**
-     * Provides menus for wordpress admin sidebar.
-     * should return an array of menus with the following structure:
-     * [
-     *   'type' => menu | submenu,
-     *  'name' => 'Name of menu will shown in sidebar',
-     *  'capability' => 'capability required to access menu',
-     *  'slug' => 'slug of menu after ?page=',.
-     *
-     *  'title' => 'page title will be shown in browser title if type is menu',
-     *  'callback' => 'function to call when menu is clicked',
-     *  'icon' =>   'icon to display in menu if menu type is menu',
-     *  'position' => 'position of menu in sidebar if menu type is menu',
-     *
-     * 'parent' => 'parent slug if submenu'
-     * ]
-     *
-     * @return array
-     */
-    private static function sideBarMenu()
-    {
-        $adminViews = new Layout();
-
-        return [
-            'Home' => [
-                'type'       => 'menu',
-                'title'      => __("Bit Pi - Your flow of automation's", 'bit-pi'),
-                'name'       => __('Bit Pi', 'bit-pi'),
-                'capability' => 'manage_options',
-                'slug'       => self::SLUG,
-                'callback'   => [$adminViews, 'body'],
-                'icon'       => 'dashicons-admin-home',
-                'position'   => '20',
-            ],
-            'Dashboard' => [
-                'parent'     => self::SLUG,
-                'type'       => 'submenu',
-                'name'       => 'Dashboard',
-                'capability' => 'manage_options',
-                'slug'       => self::SLUG . '#/',
-            ],
-            'All Flows' => [
-                'parent'     => self::SLUG,
-                'type'       => 'submenu',
-                'name'       => 'Flows',
-                'capability' => 'manage_options',
-                'slug'       => self::SLUG . '#/flows',
-            ],
-            'Connections' => [
-                'parent'     => self::SLUG,
-                'type'       => 'submenu',
-                'name'       => 'Connections',
-                'capability' => 'manage_options',
-                'slug'       => self::SLUG . '#/connections',
-            ],
-            'Webhooks' => [
-                'parent'     => self::SLUG,
-                'type'       => 'submenu',
-                'name'       => 'Webhooks',
-                'capability' => 'manage_options',
-                'slug'       => self::SLUG . '#/webhooks',
-            ],
-        ];
+        return false;
     }
 }

@@ -2,7 +2,13 @@
 
 namespace BitApps\Pi\HTTP\Requests;
 
-use BitApps\WPKit\Http\Request\Request;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Request\Request;
 
 class WebhookUpdateRequest extends Request
 {

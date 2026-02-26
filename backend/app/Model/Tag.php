@@ -2,11 +2,17 @@
 
 namespace BitApps\Pi\Model;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
 use BitApps\Pi\Config;
-use BitApps\WPDatabase\Model;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Model;
 
 /**
- * Undocumented class
+ * Undocumented class.
  */
 class Tag extends Model
 {

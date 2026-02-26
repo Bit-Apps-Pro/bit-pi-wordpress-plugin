@@ -2,17 +2,22 @@
 
 namespace BitApps\Pi\Model;
 
-use BitApps\Pi\Config;
-use BitApps\WPDatabase\Model;
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
 
-/**
- * Undocumented class.
- */
+
+use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Model;
+
 class FlowLog extends Model
 {
     public const STATUS = [
-        'SUCCESS' => 'success',
-        'ERROR'   => 'error',
+        'SUCCESS'   => 'success',
+        'ERROR'     => 'error',
+        'PENDING'   => 'pending',
+        'COMPLETED' => 'completed'
     ];
 
     protected $prefix = Config::VAR_PREFIX;
@@ -32,6 +37,6 @@ class FlowLog extends Model
         'messages',
         'input',
         'output',
-        'details'
+        'details',
     ];
 }

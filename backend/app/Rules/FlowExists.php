@@ -2,8 +2,14 @@
 
 namespace BitApps\Pi\Rules;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPValidator\Rule;
 use BitApps\Pi\Model\Flow;
-use BitApps\WPValidator\Rule;
 
 final class FlowExists extends Rule
 {

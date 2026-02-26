@@ -1,14 +1,14 @@
 <?php
 
 use BitApps\Pi\Config;
-use BitApps\WPDatabase\Connection as DB;
-use BitApps\WPKit\Migration\Migration;
+use BitApps\Pi\Deps\BitApps\WPDatabase\Connection as DB;
+use BitApps\Pi\Deps\BitApps\WPKit\Migration\Migration;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-final class BitAppsPiPluginOptions extends Migration
+final class BitAppsPiPluginOptions extends Migration // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 {
     public function up(): void
     {
@@ -25,6 +25,9 @@ final class BitAppsPiPluginOptions extends Migration
             Config::withPrefix('installed'),
             Config::withPrefix('version'),
             Config::withPrefix('app_settings'),
+            Config::withPrefix('tracking_notice_dismissed'),
+            Config::withPrefix('tracking_skipped'),
+            Config::withPrefix('secret_key'),
         ];
 
         DB::query(

@@ -2,12 +2,20 @@
 
 namespace BitApps\Pi\Providers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
 use BitApps\Pi\Config;
+use BitApps\Pi\Deps\BitApps\WPKit\Hooks\Hooks;
+use BitApps\Pi\Deps\BitApps\WPKit\Http\RequestType;
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Router\Router;
 use BitApps\Pi\Plugin;
-use BitApps\Pi\Services\Tools\Delay\Delay;
-use BitApps\WPKit\Hooks\Hooks;
-use BitApps\WPKit\Http\RequestType;
-use BitApps\WPKit\Http\Router\Router;
+use BitApps\Pi\Services\FlowHistoryService;
+use BitApps\Pi\src\Integrations\IntegrationHookLoader;
+use BitApps\Pi\src\Tools\Delay\DelayTool;
 use FilesystemIterator;
 
 class HookProvider
@@ -17,16 +25,20 @@ class HookProvider
     public function __construct()
     {
         $this->_pluginBackend = Config::get('BASEDIR') . DIRECTORY_SEPARATOR;
-        $this->loadTriggersAjax();
-        $this->loadAppHooks();
-        $this->loadActionsHooks();
-
-        Hooks::addAction('rest_api_init', [$this, 'loadApi']);
-        Hooks::addAction(Config::VAR_PREFIX . 'execute_delayed_flow', [Delay::class, 'executeDelayedFlow'], 10, 2);
+        $this->loadIntegrationsAjaxHook();
+        IntegrationHookLoader::loadActionHooks();
+        $this->loadAppAjaxHooks();
+        Hooks::addAction(Config::VAR_PREFIX . 'flow_history_cleanup', [FlowHistoryService::class, 'flowHistoryCleanup']);
+        Hooks::addAction('rest_api_init', [$this, 'loadAppApiHooks']);
         Hooks::addFilter('safe_style_css', [$this, 'allowStyleProperties']);
+        Hooks::addAction(Config::VAR_PREFIX . 'run_scheduled_flow_node', [DelayTool::class, 'runScheduledFlowNode'], 10, 2);
 
-        if (isset($_ENV['CLI_ACTIVE']) && $_ENV['CLI_ACTIVE']) {
-            include_once __DIR__ . './../../../cli/RegisterCommands.php';
+        if (!wp_next_scheduled(Config::VAR_PREFIX . 'flow_history_cleanup')) {
+            wp_schedule_event(time(), 'daily', Config::VAR_PREFIX . 'flow_history_cleanup');
+        }
+
+        if (Config::getEnv('CLI_ACTIVE')) {
+            include_once __DIR__ . '/../../../cli/RegisterCommands.php';
         }
     }
 
@@ -37,18 +49,7 @@ class HookProvider
         return $styles;
     }
 
-    /**
-     * Helps to register integration ajax.
-     */
-    public function loadActionsHooks()
-    {
-        // $this->includeTaskHooks('Actions');
-    }
-
-    /**
-     * Loads API routes.
-     */
-    public function loadApi()
+    public function loadAppApiHooks()
     {
         if (
             is_readable($this->_pluginBackend . 'hooks' . DIRECTORY_SEPARATOR . 'api.php')
@@ -64,7 +65,7 @@ class HookProvider
     /**
      * Helps to register App hooks.
      */
-    protected function loadAppHooks()
+    protected function loadAppAjaxHooks()
     {
         if (
             RequestType::is(RequestType::AJAX)
@@ -72,45 +73,31 @@ class HookProvider
         ) {
             $router = new Router(RequestType::AJAX, Config::VAR_PREFIX, '');
             $router->setMiddlewares(Plugin::instance()->middlewares());
+
             include $this->_pluginBackend . 'hooks' . DIRECTORY_SEPARATOR . 'ajax.php';
             $router->register();
         }
-
-        if (is_readable($this->_pluginBackend . 'hooks.php')) {
-            include $this->_pluginBackend . 'hooks.php';
-        }
     }
 
     /**
-     * Helps to register Triggers ajax.
+     * Helps to register Triggers & Ajax Hook.
      */
-    protected function loadTriggersAjax()
+    protected function loadIntegrationsAjaxHook()
     {
-        $this->includeTaskHooks('Apps');
-    }
-
-    /**
-     * Backend Routes and Hooks.
-     *
-     * @param string $taskName Triggers|Actions
-     */
-    private function includeTaskHooks($taskName)
-    {
-        $taskDir = $this->_pluginBackend . 'app' . DIRECTORY_SEPARATOR . 'Services' . DIRECTORY_SEPARATOR . $taskName;
+        $taskDir = $this->_pluginBackend . 'app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Integrations';
         $dirs = new FilesystemIterator($taskDir);
+
         foreach ($dirs as $dirInfo) {
             if ($dirInfo->isDir()) {
                 $taskName = basename($dirInfo);
                 $taskPath = $taskDir . DIRECTORY_SEPARATOR . $taskName . DIRECTORY_SEPARATOR;
+
                 if (is_readable($taskPath . 'Routes.php') && RequestType::is('ajax') && RequestType::is('admin')) {
                     $router = new Router(RequestType::AJAX, Config::VAR_PREFIX, '');
                     $router->setMiddlewares(Plugin::instance()->middlewares());
+
                     include $taskPath . 'Routes.php';
                     $router->register();
-                }
-
-                if (is_readable($taskPath . 'Hooks.php')) {
-                    include $taskPath . 'Hooks.php';
                 }
             }
         }

@@ -2,42 +2,45 @@
 
 namespace BitApps\Pi\HTTP\Controllers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
+use BitApps\Pi\Deps\BitApps\WPKit\Http\Response;
 use BitApps\Pi\HTTP\Requests\RefreshTokenRequest;
-use BitApps\WPKit\Http\Client\HttpClient;
-use BitApps\WPKit\Http\Response;
+use BitApps\Pi\src\Authorization\AuthorizationFactory;
+use BitApps\Pi\src\Authorization\AuthorizationType;
 
 final class AuthorizationController
 {
     public function refreshToken(RefreshTokenRequest $request)
     {
         $validatedData = $request->validated();
-        $appSlug = $validatedData['appSlug'];
 
-        $class = $this->doesAuthorizationClassExist($appSlug);
+        $appSlug = $validatedData['appSlug'] ?? '';
 
-        if ($class) {
-            $response = (object) (new $class($request['connectionId'], new HttpClient()))->refreshToken();
+        $isCustomAuthClassExists = AuthorizationFactory::authorizationClassExists($appSlug);
 
-            if (!isset($response->error)) {
-                return Response::success($response);
+        if ($isCustomAuthClassExists) {
+            $authDetails = AuthorizationFactory::getAuthorizationHandler(AuthorizationType::CUSTOM, $request['connectionId'], $appSlug)->getAuthDetails();
+
+            if (isset($authDetails['error'])) {
+                return Response::error($authDetails);
             }
 
-            return Response::error($response);
+            return Response::success($authDetails);
         }
 
-        return Response::error("{$appSlug}AuthorizationHandler class not found");
-    }
+        $authDetails = AuthorizationFactory::getAuthorizationHandler(AuthorizationType::OAUTH2, $request['connectionId'])
+            ->setRefreshTokenUrl($validatedData['refreshTokenUrl'])
+            ->getAuthDetails();
 
-    private function doesAuthorizationClassExist($appSlug)
-    {
-        $class = 'BitApps\Pi\Services\Apps\\' . $appSlug . '\\' . $appSlug . 'AuthorizationHandler';
-
-        if (class_exists($class)) {
-            return $class;
-        } elseif ("BitApps\PiPro\Services\Apps\\{$appSlug}\\{$appSlug}AuthorizationHandler") {
-            return "BitApps\PiPro\Services\Apps\\{$appSlug}\\{$appSlug}AuthorizationHandler";
+        if (isset($authDetails['error'])) {
+            return Response::error($authDetails);
         }
 
-        return false;
+        return Response::success($authDetails);
     }
 }

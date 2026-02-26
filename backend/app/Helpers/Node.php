@@ -2,6 +2,12 @@
 
 namespace BitApps\Pi\Helpers;
 
+// Prevent direct script access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+
 class Node
 {
     /**
@@ -10,10 +16,14 @@ class Node
      * @param int   $nodeId
      * @param array $nodes
      *
-     * @return collection
+     * @return collection|void
      */
     public static function getNodeInfoById($nodeId, $nodes)
     {
+        if (empty($nodes)) {
+            return;
+        }
+
         foreach ($nodes as $node) {
             if ($node['node_id'] === $nodeId) {
                 return $node;
@@ -27,7 +37,7 @@ class Node
      * @param int        $nodeId
      * @param collection $nodeInfo
      *
-     * @return collection
+     * @return collection|false|void
      */
     public static function getConditionsByNodeId($nodeId, $nodeInfo)
     {
@@ -36,8 +46,11 @@ class Node
         }
 
         foreach ($nodeInfo->data->conditions as $condition) {
-            if ($condition->id === $nodeId) {
-                return $condition->condition;
+            if ($condition->id === $nodeId && isset($condition->condition)) {
+                return [
+                    'condition' => $condition->condition,
+                    'title'     => $condition->title ?? '',
+                ];
             }
         }
     }
@@ -56,8 +69,11 @@ class Node
 
             if ($key === $keyName && $val === $value) {
                 return $fieldMap;
-            } elseif (\is_array($val)) {
+            }
+
+            if (\is_array($val)) {
                 $result = self::searchRecursive($val, $keyName, $value);
+
                 if ($result !== null) {
                     return $result;
                 }

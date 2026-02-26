@@ -4,7 +4,7 @@ namespace BitApps\Pi;
 
 use WP_CLI;
 
-if (!\defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -17,13 +17,26 @@ final class Dotenv
         }
 
         $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
         foreach ($lines as $line) {
-            if (strpos(trim($line), '#') === 0) {
+            if (strpos($line, '=') === false) {
                 continue;
             }
 
-            list($name, $value) = explode('=', $line, 2);
-            $name = trim($name);
+            $position = strpos($line, '#');
+
+            if ($position !== false) {
+                $line = substr($line, 0, $position);
+            }
+
+            if (empty($line)) {
+                continue;
+            }
+
+            list($name, $value) = explode('=', trim($line), 2);
+
+            $name = Config::VAR_PREFIX . trim($name);
+
             $value = trim($value);
 
             if (is_numeric($value)) {
@@ -45,10 +58,13 @@ final class Dotenv
         $lines = file($envFilePath, FILE_IGNORE_NEW_LINES);
 
         $value = $flag ? 'true' : 'false';
-        $pattern = "/^{$key}\s*=\s*(.*)/m";
+
+        $pattern = "/^{$key}\\s*=\\s*(.*)/m";
+
         $envKeyValue = "{$key} = {$value}";
 
         $found = false;
+
         foreach ($lines as &$line) {
             if (preg_match($pattern, $line)) {
                 $line = $envKeyValue;
@@ -57,6 +73,7 @@ final class Dotenv
                 break;
             }
         }
+
         unset($line);
 
         if (!$found) {
@@ -68,7 +85,8 @@ final class Dotenv
         $isContentUpdated = file_put_contents($envFilePath, $envData);
 
         if ($isContentUpdated === false) {
-            WP_CLI::error(sprintf('Error writing to the file %s!', $isContentUpdated));
+            WP_CLI::error(\sprintf('Error writing to the file %s!', $isContentUpdated));
+
             exit;
         }
 
